@@ -37,6 +37,7 @@ class LoginPage(Action):
         self.enter_key(self.__password_loc)
 
     click_login_text_loc = ('xpath', '//*[@id="tab-first"]/span')
+    errer_text_loc = ('xpath', '/html/body/div[2]/p')
 
     def login_homepage(self, username, password):
         """登录"""
@@ -57,9 +58,18 @@ class LoginPage(Action):
         self.submit()
         Log().info(u"点击登录")
         # 等待页面title变化
-        self.wait_title_change('九州通', 20)
+        # self.wait_title_change('九州通', 20)
+        # 获取错误密码登录提示消息
+        # self.get_text_loc(self.errer_text_loc, timeout=3)
         from pages.homePage import HomePage
         return HomePage(self.driver)
+
+    def login_text(self):
+        # 获取错误密码登录提示消息
+        hint_errer = self.get_text_loc(self.errer_text_loc, timeout=3)
+        return hint_errer
+
+
 
     #============================================忘记密码=============================================
 

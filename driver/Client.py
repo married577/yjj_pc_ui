@@ -10,7 +10,6 @@ class Client(object):
         """获取driver"""
         from selenium import webdriver
         chrome_options = Options()
-
         chrome_options.add_experimental_option('prefs', {'profile.default_content_settings.popups': 0})
         chrome_options.add_argument('start-maximized')
         chrome_options.add_experimental_option("excludeSwitches", ['enable-automation'])
