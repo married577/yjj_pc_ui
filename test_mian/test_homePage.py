@@ -9,6 +9,7 @@ import pytest
 
 username = "武汉市新洲区好药师周铺大药房"
 password = "123456"
+search_keyword = "测试"
 
 
 class TestLogin():
@@ -107,5 +108,60 @@ class TestLogin():
         assume(result11 == '帮助中心', "预期结果为：帮助中心，实际结果为：%s" % result11)
         '''关闭当前页面，切换到最后面一个窗口'''
         self.basepage.close_and_switch_window()
+
+    sleep(1)
+
+    # 右侧去还款跳转校验
+    def test_right__repayment(self):
+        result12 = self.home.right__repayment()
+        assume(result12 == '账期还款', "预期结果为：账期还款，实际结果为：%s" % result12)
+        '''关闭当前页面，切换到最后面一个窗口'''
+        self.basepage.close_and_switch_window()
+
+    sleep(1)
+
+    # 右侧发票管理跳转校验
+    def test_right__invoice_management(self):
+        result13 = self.home.right__invoice_management()
+        assume(result13 == '发票管理', "预期结果为：发票管理，实际结果为：%s" % result13)
+        '''关闭当前页面，切换到最后面一个窗口'''
+        self.basepage.close_and_switch_window()
+
+    sleep(1)
+
+    # 顶部我的订单跳转校验
+    def test_top_my_order(self):
+        result14 = self.home.top_my_order()
+        assume(result14 == '我的订单', "预期结果为：我的订单，实际结果为：%s" % result14)
+        '''关闭当前页面，切换到最后面一个窗口'''
+        self.basepage.close_and_switch_window()
+
+    sleep(1)
+
+    # 顶部会员中心跳转校验
+    def test_top_member_center(self):
+        result15 = self.home.top_member_center()
+        assume(result15 == '会员中心', "预期结果为：会员中心，实际结果为：%s" % result15)
+        '''关闭当前页面，切换到最后面一个窗口'''
+        self.basepage.close_and_switch_window()
+
+    sleep(1)
+
+    # 顶部会员中心跳转校验
+    def test_top_customer_service(self):
+        result16 = self.home.top_customer_service()
+        assume(result16 == '帮助中心', "预期结果为：帮助中心，实际结果为：%s" % result16)
+        '''关闭当前页面，切换到最后面一个窗口'''
+        self.basepage.close_and_switch_window()
+
+    sleep(1)
+
+    # 顶部搜索输入框搜索跳转校验
+    def test_search_goods(self):
+        result17 = self.home.search_goods(keywords=search_keyword)
+        assume(result17 == search_keyword, "预期结果为：{0}，实际结果为：{1}".format(search_keyword, result17))
+        '''关闭当前页面，切换到最后面一个窗口'''
+        self.basepage.close_and_switch_window()
+
 
 

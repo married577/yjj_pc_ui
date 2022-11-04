@@ -175,6 +175,75 @@ class HomePage(BaseMenus):
         text = self.get_text_loc(self.__right_help_center2)
         return text
 
+    # 右侧去还款跳转
+    __right_repayment1 = ('xpath',
+                             '//div[@class="fastEntrance"][2]/div[2]')
+    __right_repayment2 = ('xpath', '//span[@class="title"]')
+
+    def right__repayment(self):
+        '''点击右侧去还款按钮'''
+        self.click_loc(self.__right_repayment1)
+        """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
+        self.switch_window()
+        text = self.get_text_loc(self.__right_repayment2)
+        return text
+
+    # 右侧发票管理跳转
+    __right_invoice_management1 = ('xpath',
+                             '//div[@class="fastEntrance"][2]/div[3]')
+    __right_invoice_management2 = ('xpath', '//div[@class="invoice-header"]/span')
+
+    def right__invoice_management(self):
+        '''点击右侧发票管理按钮'''
+        self.click_loc(self.__right_invoice_management1)
+        """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
+        self.switch_window()
+        text = self.get_text_loc(self.__right_invoice_management2)
+        return text
+
+    # 顶部我的订单跳转
+    __top_my_order1 = ('xpath',
+                             '//div[@class="content"]/div[@class="right"]/span[2]')
+    __top_my_order2 = ('xpath', '//div[@class="ph-paths"]/span[1]')
+
+    def top_my_order(self):
+        '''点击顶部我的订单按钮'''
+        self.click_loc(self.__top_my_order1)
+        """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
+        self.switch_window()
+        text = self.get_text_loc(self.__top_my_order2)
+        return text
+
+    # 顶部会员中心跳转
+    __top_member_center1 = ('xpath',
+                             '//div[@class="content"]/div[@class="right"]/span[3]')
+    __top_member_center2 = ('xpath', '//div[@class="ph-paths"]/span')
+
+    def top_member_center(self):
+        '''点击顶部会员中心按钮'''
+        self.click_loc(self.__top_member_center1)
+        """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
+        self.switch_window()
+        text = self.get_text_loc(self.__top_member_center2)
+        return text
+
+    # 顶部客户服务跳转
+    __top_customer_service1 = ('xpath',
+                             '//div[@class="content"]/div[@class="right"]/span[4]')
+    __top_customer_service2 = ('xpath', '//ul/li[@class="el-dropdown-menu__item"]')
+    __top_customer_service3 = ('xpath', '//div[@class="ph-content"]/span')
+
+    def top_customer_service(self):
+        '''移动到顶部客户服务下面'''
+        self.move_to_element(self.__top_customer_service1)
+        sleep(1)
+        '''点击帮助中心按钮'''
+        self.click_loc(self.__top_customer_service2)
+        """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
+        self.switch_window()
+        text = self.get_text_loc(self.__top_customer_service3)
+        return text
+
     # 退出登录
     def log_out(self):
         # 移动到用户账号下
@@ -246,9 +315,11 @@ class HomePage(BaseMenus):
 
     # ====================================首页输入框搜索=====================================================
     # 搜索框
-    __search_text_loc = ('xpath', '//*[@id="searchText"]')
+    __search_text_loc = ('xpath', '//div[@class="yjj_page_header"]//div[@class="ph-si-el_input el-input"]/input')
     # 搜索按钮
-    __search_button_loc = ('xpath', '//*[@id="searchMerchandiseBtn"]')
+    __search_button_loc = ('xpath', '//div[@class="yjj_page_header"]//button[@class="el-button ph-si-btn el-button--default"]')
+    # 搜索结果页面文本获取
+    __search_result_loc = ('xpath', '//div[@class="ss-breadcrumbs"]/span[2]')
     # 搜索历史模块
     __search_history_loc = ('xpath', '//*[@id="searchHis"]')
     # 搜索历史模块中的搜索历史列表
@@ -261,16 +332,22 @@ class HomePage(BaseMenus):
         sleep(2)
         self.move_to_element(self.__search_text_loc)
         self.send_keys_loc(self.__search_text_loc, keywords)
-        self.enter_key(self.__search_text_loc)
-        #
+        self.click_loc(self.__search_button_loc)
+        # self.enter_key(self.__search_text_loc)
+        """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
+        sleep(1)
+        self.switch_window()
+        # 获取商品列表页面，搜索名称
+        result = self.get_text_loc(self.__search_result_loc)
+        return result
         # self.move_to_element(self.__search_button_loc)
         # self.click_loc(self.__search_button_loc)
         # print("点击搜索按钮")
         # 等待页面跳转到搜索结果页面
-        self.wait_title_change('商品搜索列表', timeout=30)
-        Log().info(u'跳转到商品搜索列表页面')
-        from pages.prodSearchResultPage import SearchResult
-        return SearchResult(self.driver)
+        # self.wait_title_change('商品搜索列表', timeout=30)
+        # Log().info(u'跳转到商品搜索列表页面')
+        # from pages.prodSearchResultPage import SearchResult
+        # return SearchResult(self.driver)
 
     # 判断是否有搜索历史列表
     def is_search_history_exist(self):
