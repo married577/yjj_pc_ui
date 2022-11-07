@@ -136,22 +136,6 @@ class MySQLOperation(object):
 #             r[k] = value
 #         return r
 
-# if __name__ == "__main__":
-    # from common.fileReader import IniUtil
-    # import json
-    # ini = IniUtil()
-    # cof = ini.get_value_of_option("db_pre", "supp_connection")
-    # connection = json.loads(cof)
-    # import sys
-    # print(sys.path)
-    # sys.path.append(r'D:\oracle\instantclient_18_3')
-    # print(sys.path)
-    # db = OracleOperation()
-    # sql = "select supplier_ID, supplier_name, link_phone from tb_sup_b2b t where t.supplier_name='供应商勿动'"
-    # x = db.search_one()
-    # print(x)
-    # db.close_db()
-    # print(x)
 
 
 

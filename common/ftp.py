@@ -2,7 +2,7 @@ import os
 import sys
 import ftplib
 from common.fileReader import IniUtil
-from config.file_path import REPORT_PATH, TEST_CASE_PATH
+from config.file_path import REPORT_PATH
 
 
 server_ip = IniUtil().get_value_of_option('ftp', 'server_ip')
@@ -58,10 +58,5 @@ if __name__ == "__main__":
     ftp.Login(ftp_username, ftp_password)  # 登录，如果匿名登录则用空串代替即可
     # ftp.DownLoadFileTree('E:/study', '/owt/20170504')  # 从目标目录下载到本地目录E盘
     # ftp.UpLoadFileTree('E:/study', '/owt/20170504')
-    # ftp.DownLoadFile('E:/study/r2101-ROOT-20170428.zip','/owt/20170504/r2101-ROOT-20170428.zip')
-    # ftp.UpLoadFile(LocalFile_pre + '201901141554_result.html', RemoteFile_pre + '201901141554_result.html')
-    print(REPORT_PATH + '\\' + '1212.html', RemoteFile_pre + '2121.html')
-    ftp.UpLoadFile(REPORT_PATH + '\\' + '1212.html', RemoteFile_pre + '2121.html')
-
     ftp.close()
     print("上传数据成功")
