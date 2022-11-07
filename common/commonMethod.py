@@ -7,7 +7,6 @@ from config.file_path import RESOURCE_PATH
 import json
 from common.database import MySQLOperation
 import re
-from common.redisOperation import RedisOperation
 from common.log import Log
 
 
@@ -117,21 +116,6 @@ class CommonMethod(object):
         db = MySQLOperation(connection)
         return db
 
-    def connect_redis(self, connection_name):
-        """
-        连接redis
-        :param connection_name: option name under [redis_test], [redis_pre],[redis_prod], eg: sup, b2b_app, b2b_be
-        :return: 已连接的redis对象
-        """
-        # 获取redis连接
-        ini = IniUtil()
-        section = "redis_" + self.env
-        con = ini.get_value_of_option(section, connection_name)
-        connection = json.loads(con)
-        # 连接redis
-        redis = RedisOperation(connection)
-        return redis
-
     def compare_list(self, list1, list2):
         """
         获取两个列表的交集，返回数量
@@ -142,21 +126,6 @@ class CommonMethod(object):
         a = set(list1)
         b = set(list2)
         return len(a & b)
-
-    # # 比较两个字典是否相等
-    # def compare_dic(self, dict_cc, dict_aa):
-    #     keys1 = []
-    #     for item in dict_cc.items():
-    #         keys1.append(item[0])
-    #     for i in keys1:
-    #         if dict_cc[i] != dict_aa[i]:
-    #             print("字典数据不一致")
-    #             print(dict_aa[i], dict_cc[i])
-    #             return False
-    #         else:
-    #             print("字典数据一致")
-    #             print(dict_aa[i], dict_cc[i])
-    #             return True
 
     # 获取字典的keys值，dict_ac实际结果字典
     def get_dict_keys(self, dict_ac):
