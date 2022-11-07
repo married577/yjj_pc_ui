@@ -12,9 +12,9 @@ from time import sleep
 class LoginPage(Action):
 
     # 定位器，通过元素属性定位元素对象
-    __username_loc = ('id', "jzt_username")
-    __password_loc = ('id', "jzt_password")
-    __submit_loc = ('xpath', "//*[@id='login_form_id']/div[4]/button")
+    __username_loc = ('xpath', "//input[@name='username']")
+    __password_loc = ('xpath', "//input[@name='password']")
+    __submit_loc = ('xpath', '//*[@id="pane-first"]/form/div/button')
     # 登录主页页面
     __login_homepage_url = CommonMethod().get_endpoint('loginpage')
 
@@ -36,12 +36,13 @@ class LoginPage(Action):
         # 输入密码后，直接在输入密码框按enter键
         self.enter_key(self.__password_loc)
 
-    click_login_text_loc = ('xpath', '//div[@class="userTips"]')
+    click_login_text_loc = ('xpath', '//*[@id="tab-first"]/span')
+    errer_text_loc = ('xpath', '/html/body/div[2]/p')
 
     def login_homepage(self, username, password):
         """登录"""
-        self.open(self.__login_homepage_url, u'登录')
-        Log().info(u"打开登录首页: %s" % self.__login_homepage_url)
+        self.open(self.__login_homepage_url)
+        Log().info("打开登录首页: %s" % self.__login_homepage_url)
         sleep(1)
         self.js_focus_element_loc(self.click_login_text_loc)
         sleep(1)
@@ -57,9 +58,18 @@ class LoginPage(Action):
         self.submit()
         Log().info(u"点击登录")
         # 等待页面title变化
-        self.wait_title_change('九州通', 20)
+        # self.wait_title_change('九州通', 20)
+        # 获取错误密码登录提示消息
+        # self.get_text_loc(self.errer_text_loc, timeout=3)
         from pages.homePage import HomePage
         return HomePage(self.driver)
+
+    def login_text(self):
+        # 获取错误密码登录提示消息
+        hint_errer = self.get_text_loc(self.errer_text_loc, timeout=3)
+        return hint_errer
+
+
 
     #============================================忘记密码=============================================
 
