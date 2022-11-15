@@ -143,7 +143,7 @@ class Action(object):
         """元素被覆盖，无法点击,使用用Enter代替click操作，参数为元素element"""
         element.send_keys(Keys.ENTER)
 
-    def send_keys_loc(self, locator, text, clear_first=True, click_first=False):
+    def send_keys_loc(self, locator, text='', clear_first=True, click_first=False):
         """清空后输入文本"""
         element = self.find_element(locator)
         if click_first:
@@ -290,6 +290,11 @@ class Action(object):
         """鼠标点击元素操作"""
         element = self.find_element(locator)
         ActionChains(self.driver).click(element).perform()
+
+    def clear_the_input(self, locator):
+        """清空输入框操作"""
+        element = self.find_element(locator)
+        element.clear()
 
     def back(self):
         """后退"""
@@ -506,7 +511,6 @@ class Action(object):
 
     def wait_element_staleness_ele(self, element, timeout=10):
         WebDriverWait(self.driver, timeout, 0.5).until(EC.staleness_of(element))
-
 
     def wait_invisibility_of_all_elements(self, locator, timeout=10):
         """等待一组元素，所有元素都不可见"""

@@ -28,9 +28,13 @@ class TestLogin():
 
     # 登录
     def test_login_loginpag(self):
-        homepage = self.loginpage.login_homepage(username, password)
-        homepage.home_page_guidance()
-        result1 = homepage.get_top_username()  # 获取首页登录店铺名称
+        # 账号密码登录
+        # homepage = self.loginpage.login_homepage(username, password)
+        # cookies注入登录
+        self.loginpage.login_homepage_by_cookies()
+        # 首页引导
+        self.home.home_page_guidance()
+        result1 = self.home.get_top_username()  # 获取首页登录店铺名称
         assume(result1 == username, "预期结果为：{1}，实际结果为：{0}".format(result1, username))
 
     # 顶部消息中心跳转校验

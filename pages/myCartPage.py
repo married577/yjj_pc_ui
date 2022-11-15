@@ -39,6 +39,13 @@ class MyCart(BaseMenus):
     __total_number_loc = ('xpath', "//span[@class='a-color']")
     # 弹出消息
     __message_loc = ('xpath', '//div[@type="dialog"]/div[@class="layui-layer-content"]')
+    # 所有商品名称
+    __all_goods_names_loc = ('xpath', '//*[@id="commodity-details"]/div[1]/div/div[2]/div/div/div/ul/li/div/div[1]/div[3]/span[1]')
+
+    # 提取购物车所有商品名称
+    def all_goods_names(self):
+        text = self.get_text_for_elements(self.__all_goods_names_loc)
+        return text
 
     def count_of_prods(self):
         """

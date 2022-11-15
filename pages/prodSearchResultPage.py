@@ -15,7 +15,6 @@ from common.fileReader import IniUtil
 
 
 class SearchResult(BaseMenus):
-
     f = IniUtil()
 
     # ==================================================打开搜索结果页面==========================================
@@ -46,7 +45,7 @@ class SearchResult(BaseMenus):
 
     # 生产厂家
     __manufacturer_bigPicture = (
-    'xpath', '//ul[@id="list_big_pic"]/li[not(div[3]!="")]/span[4][@class="u_goods_com text-overflow"]')
+        'xpath', '//ul[@id="list_big_pic"]/li[not(div[3]!="")]/span[4][@class="u_goods_com text-overflow"]')
 
     def is_manufacturer_contain_keyword(self, keywords):
         """判断商品搜索列表中，是否所有商品的生产厂商名称都包含生产厂商关键字（生产厂商的部分）"""
@@ -61,8 +60,15 @@ class SearchResult(BaseMenus):
             result = False
         return result
 
+    __clear_search_loc = ('xpath', '//span[@class="ss-breadcrumbs-clear"]')
+
+    # 清除筛选
+    def clear_search(self):
+        self.click_loc(self.__clear_search_loc)
+        sleep(2)
+
     # 搜索框
-    __search_text_loc = ('xpath', '//*[@id="searchText"]')
+    __search_text_loc = ('xpath', '//div[@class="yjj_page_header"]//input[@class="el-input__inner"]')
     __search_button_loc = ('xpath', "//div[@class='m_sch_btn']/button")
 
     # 获取搜索框的值
@@ -70,11 +76,322 @@ class SearchResult(BaseMenus):
         text = self.get_attribute_loc(self.__search_text_loc, 'value')
         return text
 
+    __goods_name_loc = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
+
+    # 获取商品列表第一个商品的商品名称
+    def get_goods_name(self):
+        try:
+            text = self.get_text_loc(self.__goods_name_loc)
+            return text
+        except TimeoutException:
+            print(u"无商品，请先配置！")
+
+    __detail_goods_name_loc = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
+    __detail_goods_name_loc2 = ('xpath', '//div[@class="gd-full_screen"]/div/div[2]/div[2]/h3/span[2]')
+
+    # 获取商品列表第一个商品，点击商品名称进入商品详情里面的商品名称
+    def get_detail_goods_name(self):
+        try:
+            self.click_loc(self.__detail_goods_name_loc)
+            self.switch_window()
+            sleep(2)
+            text = self.get_text_loc(self.__detail_goods_name_loc2)
+            '''关闭当前页面，切换到最后面一个窗口'''
+            self.close_and_switch_window()
+            sleep(2)
+            return text
+        except TimeoutException:
+            print(u"无商品，请先配置！")
+
+    __detail_goods_picture_loc = ('xpath', '//div[@class="page search"]/div/div[2]/div/div[1]/div[1]/div/div[1]/div/div')
+    __detail_goods_picture_loc2 = ('xpath', '//div[@class="gd-full_screen"]/div/div[2]/div[2]/h3/span[2]')
+
+    # 获取商品列表第一个商品，点击商品图片进入商品详情里面的商品名称
+    def get_detail_goods_picture(self):
+        try:
+            self.click_loc(self.__detail_goods_picture_loc)
+            self.switch_window()
+            sleep(2)
+            text = self.get_text_loc(self.__detail_goods_picture_loc2)
+            '''关闭当前页面，切换到最后面一个窗口'''
+            self.close_and_switch_window()
+            sleep(2)
+            return text
+        except TimeoutException:
+            print(u"无商品，请先配置！")
+
     # 搜索
     def search_goods(self, keywords=''):
-        sleep(2)
+        sleep(1)
         self.send_keys_loc(self.__search_text_loc, keywords)
         self.enter_key(self.__search_text_loc)
+
+    # 一级分类定位
+    __first_class_loc = ('xpath', '//div[@class="ssc-section"]/span[1]')
+    __first_class_loc2 = ('xpath', '//div[@class="ss-breadcrumbs-selected"]/div/span[1]')
+
+    # 一级分类搜索
+    def first_class_search(self):
+        try:
+            # 获取分类名称
+            text1 = self.get_text_loc(self.__first_class_loc)
+            # 点击分类搜索
+            self.click_loc(self.__first_class_loc)
+            # 获取搜索结果分类名称
+            text2 = self.get_text_loc(self.__first_class_loc2)
+            return text1, text2
+        except TimeoutException:
+            print(u"无分类，请先配置！")
+
+    __store_search_loc = (
+        'xpath', '//div[@class="page search"]/div/div[1]/div/div[2]/div[2]/div[2]/div/div/div[1]/div[1]/div/span')
+    __store_search_loc2 = (
+        'xpath', '//div[@class="sr-list-item"][1]//div[@class="gc-l7"]/div/div[1]/span')
+
+    # 搜索条件，店铺搜索
+    def store_search(self):
+        try:
+            # 获取第一个店铺名称
+            text1 = self.get_text_loc(self.__store_search_loc)
+            # 点击店铺
+            self.click_loc(self.__store_search_loc)
+            # 获取搜索结果分类名称
+            text2 = self.get_text_loc(self.__store_search_loc2)
+            return text1, text2
+        except TimeoutException:
+            print(u"无店铺，请先配置！")
+
+    __manufacturers_search_loc = (
+        'xpath', '//div[@class="page search"]/div/div[1]/div/div[2]/div[3]/div[2]/div/div/div[1]/div[1]/div/span')
+    __manufacturers_search_loc2 = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
+    __manufacturers_search_loc3 = ('xpath', '//tr[@class="el-descriptions-row"]/td[2]//span[2]/div')
+
+    # 搜索条件，厂家搜索
+    def manufacturers_search(self):
+        try:
+            # 获取第一个厂家名称
+            text1 = self.get_text_loc(self.__manufacturers_search_loc)
+            # 点击厂家
+            self.click_loc(self.__manufacturers_search_loc)
+            # 点击商品名称，进入商品详情
+            self.click_loc(self.__manufacturers_search_loc2)
+            # 切换到最新窗口
+            self.switch_window()
+            # 页面滑动到元素的位置
+            self.js_focus_element_loc(self.__manufacturers_search_loc3)
+            # 商品详情内找到厂家信息提取出来
+            text2 = self.get_text_loc(self.__manufacturers_search_loc3)
+            return text1, text2
+        except TimeoutException:
+            print(u"无厂家，请先配置！")
+
+    __more_options_loc = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[2]/div[5]/div')
+
+    # 筛选项-更多选项点击
+    def more_options(self):
+        self.click_loc(self.__more_options_loc)
+
+    __size_search_loc = (
+        'xpath',
+        '//div[@class="page search"]/div/div[1]/div/div[2]/div[4]/div[1]/div[2]/div/div/div[1]/div[1]/div/span')
+    __size_search_loc2 = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
+    __size_search_loc3 = ('xpath', '//tbody[1]/tr/td[3]/div/span[2]')
+
+    # 搜索条件，规格搜索
+    def size_search(self):
+        try:
+            # 点击更多选项
+            self.more_options()
+            # 获取第一个规格名称
+            text1 = self.get_text_loc(self.__size_search_loc)
+            # 点击规格
+            self.click_loc(self.__size_search_loc)
+            # 点击商品名称，进入商品详情
+            self.click_loc(self.__size_search_loc2)
+            # 切换到最新窗口
+            self.switch_window()
+            # 页面滑动到元素的位置
+            # self.js_focus_element_loc(self.__size_search_loc3)
+            sleep(2)
+            # 商品详情内找到规格信息提取出来
+            text2 = self.get_text_loc(self.__size_search_loc3)
+            return text1, text2
+        except TimeoutException:
+            print(u"无规格，请先配置！")
+
+    __dosage_form_loc = (
+        'xpath',
+        '//div[@class="page search"]/div/div[1]/div/div[2]/div[4]/div[2]/div[2]/div/div/div[1]/div[1]/div/span')
+    __dosage_form_loc2 = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
+    __dosage_form_loc3 = ('xpath', '//div[@class="gd-full_screen"]/div/div[2]/div[2]/div/div[@class="gdb-desc-item el-row"]/div[2]/span[2]')
+
+    # 搜索条件，剂型搜索
+    def dosage_form_search(self):
+        try:
+            # 点击更多选项
+            self.more_options()
+            # 获取第一个剂型名称
+            text1 = self.get_text_loc(self.__dosage_form_loc)
+            # 点击剂型
+            self.click_loc(self.__dosage_form_loc)
+            # 点击商品名称，进入商品详情
+            self.click_loc(self.__dosage_form_loc2)
+            # 切换到最新窗口
+            self.switch_window()
+            # 页面滑动到元素的位置
+            # self.js_focus_element_loc(self.__dosage_form_loc3)
+            # 商品详情内找到剂型信息提取出来
+            sleep(2)
+            text2 = self.get_text_loc(self.__dosage_form_loc3)
+            return text1, text2
+        except TimeoutException:
+            print(u"无剂型，请先配置！")
+
+    __condition_jiaotc_loc1 = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[3]/label[4]/span[2]')
+    __condition_jiaotc_loc2 = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
+    __condition_jiaotc_loc3 = ('xpath', '//div[@class="gd-full_screen"]/div/div[2]/div[2]/div[2]/div[6]/div[2]/span[2]')
+
+    # 综合条件-甲类OTC
+    def composition_condition_jiaotc(self):
+        try:
+            # 获取甲类OTC文本
+            text1 = self.get_text_loc(self.__condition_jiaotc_loc1)
+            # 点击甲类OCT按钮，使按钮变成选中状态
+            self.click_loc(self.__condition_jiaotc_loc1)
+            sleep(2)
+            # 进入第一个商品详情
+            self.click_loc(self.__condition_jiaotc_loc2)
+            # 切换到最新窗口
+            self.switch_window()
+            sleep(2)
+            # 获取商品详情，处方分类类型
+            text2 = self.get_text_loc(self.__condition_jiaotc_loc3)
+            # 关闭当前窗口回到最后一个窗口页
+            self.close_and_switch_window()
+            # 再次点击甲类OCT按钮，还原未选中状态
+            self.click_loc(self.__condition_jiaotc_loc1)
+            sleep(2)
+            return text1, text2
+        except TimeoutException:
+            print(u"定位不到甲类OCT，请修改定位元素")
+
+    __condition_yiotc_loc1 = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[3]/label[5]/span[2]')
+    __condition_yiotc_loc2 = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
+    __condition_yiotc_loc3 = ('xpath', '//*[@id="__layout"]/div/div/div[5]/div/div[2]/div[2]/div/div[6]/div[2]/span[2]')
+
+    # 综合条件-乙类OTC
+    def composition_condition_yiotc(self):
+        try:
+            # 获取乙类OTC文本
+            text1 = self.get_text_loc(self.__condition_yiotc_loc1)
+            # 点击乙类OCT按钮，使按钮变成选中状态
+            self.click_loc(self.__condition_yiotc_loc1)
+            sleep(2)
+            # 进入第一个商品详情
+            self.click_loc(self.__condition_yiotc_loc2)
+            # 切换到最新窗口
+            self.switch_window()
+            sleep(2)
+            # 获取商品详情，处方分类类型
+            text2 = self.get_text_loc(self.__condition_yiotc_loc3)
+            # 关闭当前窗口回到最后一个窗口页
+            self.close_and_switch_window()
+            # 再次点击乙类OCT按钮，还原未选中状态
+            self.click_loc(self.__condition_yiotc_loc1)
+            sleep(2)
+            return text1, text2
+        except TimeoutException:
+            print(u"定位不到乙类OCT，请修改定位元素")
+
+    __condition_ethicals_loc1 = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[3]/label[6]/span[2]')
+    __condition_ethicals_loc2 = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
+    __condition_ethicals_loc3 = ('xpath', '//*[@id="__layout"]/div/div/div[5]/div/div[2]/div[2]/div/div[5]/div[2]/span[2]')
+
+    # 综合条件-处方药
+    def composition_condition_ethicals(self):
+        try:
+            # 获取处方药文本
+            text1 = self.get_text_loc(self.__condition_ethicals_loc1)
+            # 点击处方药按钮，使按钮变成选中状态
+            self.click_loc(self.__condition_ethicals_loc1)
+            sleep(2)
+            # 进入第一个商品详情
+            self.click_loc(self.__condition_ethicals_loc2)
+            # 切换到最新窗口
+            self.switch_window()
+            sleep(2)
+            # 获取商品详情，处方分类类型
+            text2 = self.get_text_loc(self.__condition_ethicals_loc3)
+            # 关闭当前窗口回到最后一个窗口页
+            self.close_and_switch_window()
+            # 再次点击处方药按钮，还原未选中状态
+            self.click_loc(self.__condition_ethicals_loc1)
+            sleep(2)
+            return text1, text2
+        except TimeoutException:
+            print(u"定位不到处方药，请修改定位元素")
+
+    __condition_instrument_loc1 = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[3]/label[7]/span[2]')
+    __condition_instrument_loc2 = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
+    __condition_instrument_loc3 = ('xpath', '//*[@id="__layout"]/div/div/div[5]/div/div[2]/div[2]/div/div[5]/div[2]/span[2]')
+
+    # 综合条件-器械
+    def composition_condition_instrument(self):
+        try:
+            # 获取器械文本
+            text1 = self.get_text_loc(self.__condition_instrument_loc1)
+            # 点击器械按钮，使按钮变成选中状态
+            self.click_loc(self.__condition_instrument_loc1)
+            sleep(2)
+            # 进入第一个商品详情
+            self.click_loc(self.__condition_instrument_loc2)
+            # 切换到最新窗口
+            self.switch_window()
+            sleep(2)
+            # 获取商品详情，器械类型
+            text2 = self.get_text_loc(self.__condition_instrument_loc3)
+            # 关闭当前窗口回到最后一个窗口页
+            self.close_and_switch_window()
+            # 再次点击器械按钮，还原未选中状态
+            self.click_loc(self.__condition_instrument_loc1)
+            sleep(2)
+            return text1, text2
+        except TimeoutException:
+            print(u"定位不到处方药，请修改定位元素")
+
+    __search_page_return_loc1 = ('xpath', '//div[@class="yjj_page_header"]//div[@class="ph-logo"]/div/img')
+    __search_page_return_loc2 = ('xpath', '//div[@class="textAlignCenter"]/span')
+
+    # 搜索页面点击药九九logo返回到首页
+    def search_page_return(self):
+        # 点击药九九logo
+        self.click_loc(self.__search_page_return_loc1)
+        # 首页获取右侧用户名称
+        text = self.get_text_loc(self.__search_page_return_loc2)
+        return text
+
+    __goods_purchased_loc1 = ('xpath', '//div[@class="page search"]/div/div[2]/div/div[1]/div[1]/div/div[8]/div/div[2]/div')
+    __goods_purchased_loc2 = ('xpath', '//div[@class="page search"]/div/div[2]/div/div[1]/div[1]/div/div[9]/button')
+    __goods_purchased_loc3 = ('xpath', '/html/body/div[3]/p')
+
+    # 列表商品加购，加购第一个商品
+    def first_goods_purchased(self):
+        try:
+            # 点击商品加购,2次
+            self.click_loc(self.__goods_purchased_loc1)
+            self.click_loc(self.__goods_purchased_loc2)
+            # 提取加购提示消息
+            text = self.get_text_loc(self.__goods_purchased_loc3)
+            return text
+        except TimeoutException:
+            print(u"没有定位到商品，请先配置！")
+
+    __shopping_cart_skip_loc = ('xpath', '//div[@class="yjj_page_header"]//div[@class="ph-icon_menus"]/div/div[2]/div/span[1]')
+
+    # 商品搜索页面跳转到购物车
+    def shopping_cart_skip(self):
+        self.click_loc(self.__shopping_cart_skip_loc)
+        sleep(3)
 
     # ==============================================搜索过滤区域=======================================================
     # 综合按钮
@@ -92,9 +409,11 @@ class SearchResult(BaseMenus):
     # 处方药 按钮
     __chuf__button_loc = ('xpath', '//div[@class="checkbox"]//input[@id="chuf"]/following-sibling::span[1]')
     # 搜索过滤区-价格的下限
-    __price_down_loc = ('xpath', '//input[@id="startPrice"]')
+    __price_down_loc = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[2]/div/div[1]/div[1]/input')
     # 搜索过滤区-价格的上限
-    __price_up_loc = ('xpath', '//input[@id="endPrice"]')
+    __price_up_loc = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[2]/div/div[1]/div[2]/input')
+    # 搜索过滤区-价格确认按钮
+    __price_confirm_loc = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[2]/div/div[2]/div[2]')
     # 搜索过滤区-确定按钮
     __price_confirm = ('xpath', '//a[text()="确定"]')
     # 搜索结果列表中-历史采购标签-列表模式
@@ -213,9 +532,27 @@ class SearchResult(BaseMenus):
             result = False
         return result
 
+    __order_of_price_loc = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[1]/div[3]')
+
+    # 综合条件-价格排序-倒序
+    def order_of_price(self):
+        # 第一次点击价格排序按钮，变成正序
+        self.click_loc(self.__order_of_price_loc)
+        # 第二次点击价格排序按钮，变成倒序
+        self.click_loc(self.__order_of_price_loc)
+
+    __get_price_loc1 = ('xpath', '//div[@class="page search"]/div/div[2]/div/div[1]/div[1]/div/div[2]/span/span')
+    __get_price_loc2 = ('xpath', '//div[@class="page search"]/div/div[2]/div/div[1]/div[2]/div/div[2]/span/span')
+
+    # 获取商品列表第一个商品和第二个商品的价格
+    def get_the_price(self):
+        price1 = self.get_text_loc(self.__get_price_loc1)
+        price2 = self.get_text_loc(self.__get_price_loc2)
+        return price1, price2
+
     def price_rank(self, down, up):
         """
-        搜索结果商品列表，筛选栏-价格，输入上限和下限
+        搜索结果商品列表，综合条件-价格范围，输入上限和下限
         :param down: 价格区间-下限
         :param up: 价格区间-上限
         :return:
@@ -225,6 +562,8 @@ class SearchResult(BaseMenus):
         # 点击价格框的下限和上限
         self.send_keys_loc(self.__price_down_loc, down)
         self.send_keys_loc(self.__price_up_loc, up)
+        # 点击确认按钮
+        self.click_loc(self.__price_confirm_loc)
 
     def price_enter(self, down, up):
         """
@@ -343,7 +682,8 @@ class SearchResult(BaseMenus):
     # ===================================================商品列表商品信息================================================
 
     # 商品名称连接
-    __prod_bigPicture_name = ('xpath', '//ul[@id="list_big_pic"]/li[not(div[3]!="")]/span[@class="u_goods_tit text-overflow"]/a')
+    __prod_bigPicture_name = (
+        'xpath', '//ul[@id="list_big_pic"]/li[not(div[3]!="")]/span[@class="u_goods_tit text-overflow"]/a')
 
     def get_prods_list(self):
         """
@@ -373,7 +713,7 @@ class SearchResult(BaseMenus):
         prodno = None
         if count > 0:
             # 获得一个商品数量的随机整数
-            x = random.randint(0, count-1)
+            x = random.randint(0, count - 1)
             # 拿到商品列表中的一个随机商品
             ele = self.get_prods_list()[x]
             self.js_focus_element_ele(ele)
@@ -400,7 +740,7 @@ class SearchResult(BaseMenus):
         return result
 
     # 获取搜索列表全部结果后面的分类文本
-    __searchresult_prod_class_text_loc = ('xpath','//ul[@class="breadcrumb"]//li/a[@class="m_tag m_tag_l4 fixbox"]')
+    __searchresult_prod_class_text_loc = ('xpath', '//ul[@class="breadcrumb"]//li/a[@class="m_tag m_tag_l4 fixbox"]')
 
     def get_searchresult_prod_class_text(self):
         """获取搜索列表全部结果后面的分类文本"""
@@ -414,7 +754,9 @@ class SearchResult(BaseMenus):
     # =======================================商品价格相关=======================================================
 
     # 商品价格
-    __price_bigPicture = ('xpath', '//ul[@id="list_big_pic"]/li[not(div[3]!="")]//span[@class="Price"]/span[contains(@class,"memberPrice")]')
+    __price_bigPicture = (
+        'xpath',
+        '//ul[@id="list_big_pic"]/li[not(div[3]!="")]//span[@class="Price"]/span[contains(@class,"memberPrice")]')
 
     def get_price_of_original(self):
         """
@@ -466,7 +808,7 @@ class SearchResult(BaseMenus):
             sleep(1)
             sleep(1)
             # 获得一个商品数量的随机整数
-            x = random.randint(0, count-1)
+            x = random.randint(0, count - 1)
             # 拿到商品列表中的一个随机商品
             ele = self.get_prods_list()[x]
             self.js_focus_element_ele(ele)
@@ -493,7 +835,7 @@ class SearchResult(BaseMenus):
             # 获取所有商品图片
             # pictures = self.find_elements(self.__prod_pic_list_loc)
             pictures = self.find_elements_visibility(self.__prod_pic_bigPicture)
-            x = random.randint(0, count-1)
+            x = random.randint(0, count - 1)
             # 拿到商品列表中的一个随机商品
             ele = pictures[x]
             self.js_focus_element_ele(ele)
@@ -563,10 +905,10 @@ class SearchResult(BaseMenus):
         if count is 0:
             # 如果数量是0，则点击下一页，直到count大于0为止
             pages = self.total_pages()
-            for i in list(range(1, pages-1)):
+            for i in list(range(1, pages - 1)):
                 # 点击下一页
                 self.click_page_navigation_button('下一页')
-                Log().info("打开商品分页第:{}页".format(i+1) )
+                Log().info("打开商品分页第:{}页".format(i + 1))
                 # 等待页面刷新
                 self.wait_result_page_refresh()
                 # 获取当前页面可加入缺货篮的商品数量
@@ -595,10 +937,10 @@ class SearchResult(BaseMenus):
             if count is 0:
                 # 如果数量还是0，则点击上一页，直到count大于0为止
                 pages = self.total_pages()
-                for i in list(range(1, pages-1)):
+                for i in list(range(1, pages - 1)):
                     # 点击上一页
                     self.click_page_navigation_button('上一页')
-                    Log().info("打开商品分页倒数第%s页" % (i+1))
+                    Log().info("打开商品分页倒数第%s页" % (i + 1))
                     # 等待页面刷新
                     self.wait_result_page_refresh()
                     # 获取当前页面可加入缺货篮的商品数量
@@ -790,7 +1132,7 @@ class SearchResult(BaseMenus):
         :return:
         """
         # 输入框定位元素
-        __number_input_loc = ('xpath','//input[@id="merchandiseNumberBigPic{}"]'.format(prod))
+        __number_input_loc = ('xpath', '//input[@id="merchandiseNumberBigPic{}"]'.format(prod))
         # 鼠标焦点移除定位
         __bigpic_delete_choose_num_loc = ('xpath', '//div[@class="kucun"]/span[1]')
         # 点击大图加购
@@ -805,7 +1147,7 @@ class SearchResult(BaseMenus):
         # 点击加购
         self.click_loc(bigpic_add_prod_loc)
 
-    def add_cart_workflow(self, prod_no, num=None,sing=None):
+    def add_cart_workflow(self, prod_no, num=None, sing=None):
         """
         打开只有目标商品的搜索结果页，将该商品加入购物车
         :param num: 加购的数量，默认为None，即不编辑数量，直接以默认值加购
@@ -816,7 +1158,7 @@ class SearchResult(BaseMenus):
         self.open_search_result_page(keyword=prod_no)
         sleep(2)
         # 加购
-        self.bigpic_prod_number(prod_no,num=num)
+        self.bigpic_prod_number(prod_no, num=num)
 
     def add_prods_to_cart_workflow(self, prod_info):
         """
@@ -863,7 +1205,7 @@ class SearchResult(BaseMenus):
     def plus_prod(self):
         self.click_loc(self.__plus_loc)
 
-     # 减商品
+    # 减商品
     def minus_prod(self):
         self.click_loc(self.__minus_loc)
 
@@ -1016,11 +1358,11 @@ class SearchResult(BaseMenus):
 
     def fenlei_text(self, expect_text):
         """"搜索结果页一级分类显示(完全一样，适用于药品分类的一级)"""
-        result=True
-        msg=''
-        loc_yiji= '//div[@class="m_cond_bd"]/div[@class="m_cond_con"]/ul[@class="m_cond_lst"]/li/a'
-        loc= ('xpath', loc_yiji)
-        actual_texts= self.get_text_for_elements(loc)
+        result = True
+        msg = ''
+        loc_yiji = '//div[@class="m_cond_bd"]/div[@class="m_cond_con"]/ul[@class="m_cond_lst"]/li/a'
+        loc = ('xpath', loc_yiji)
+        actual_texts = self.get_text_for_elements(loc)
         # 打印元素的实际文本
         print(actual_texts)
         if operator.eq(actual_texts, expect_text):
@@ -1032,30 +1374,31 @@ class SearchResult(BaseMenus):
 
     def fenlei_contain_text(self, expect_text):
         """"搜索结果页一级分类显示(验证包含，适用于器械分类的一级)"""
-        result=True
-        msg=''
-        xpath="//div[@class='m_cond_bd']/div[@class='m_cond_con']/ul[@class='m_cond_lst']/li/a"
+        result = True
+        msg = ''
+        xpath = "//div[@class='m_cond_bd']/div[@class='m_cond_con']/ul[@class='m_cond_lst']/li/a"
         home_special = HomeAndSpecial(self.driver)
-        yiji_rs=home_special.test_contain_texts(xpath, expect_text)
+        yiji_rs = home_special.test_contain_texts(xpath, expect_text)
         if yiji_rs[0] is False:
             result = False
             msg = msg + yiji_rs[1]
         return result, msg
 
-    def click_fenlei(self, xpath1,xpath2,xpath3,mianbaoxie1,mianbaoxie2,mianbaoxie3,erji_text,sanji1_text,sanji2_text):
+    def click_fenlei(self, xpath1, xpath2, xpath3, mianbaoxie1, mianbaoxie2, mianbaoxie3, erji_text, sanji1_text,
+                     sanji2_text):
         """搜索结果页点击各级分类验证显示（面包屑，下级分类文本）"""
-        result=True
+        result = True
         msg = ''
-        loc_yiji=('xpath', xpath1)
+        loc_yiji = ('xpath', xpath1)
         loc_erji = ('xpath', xpath2)
         loc_sanji = ('xpath', xpath3)
         # 点击一级分类
         self.click_loc(loc_yiji)
         sleep(1)
-        text_erji= "//div[text()='二级分类']/following-sibling::div[1]//li/a"
+        text_erji = "//div[text()='二级分类']/following-sibling::div[1]//li/a"
         text_sanji = "//div[text()='三级分类']/following-sibling::div[1]//li/a"
-        text_mbx="//div[@class='col-lg-9 col-md-9']/ul/li/a/span"
-        home_special= HomeAndSpecial(self.driver)
+        text_mbx = "//div[@class='col-lg-9 col-md-9']/ul/li/a/span"
+        home_special = HomeAndSpecial(self.driver)
         erji_rs = home_special.test_contain_texts(text_erji, erji_text)
         sanji_rs = home_special.test_contain_texts(text_sanji, sanji1_text)
         mianbaoxie_rs = home_special.test_texts(text_mbx, mianbaoxie1)
@@ -1071,11 +1414,11 @@ class SearchResult(BaseMenus):
         if xpath2 is not '':
             self.click_loc(loc_erji)
             sleep(1)
-            mianbaoxie_rs1=home_special.test_texts(text_mbx, mianbaoxie2)
+            mianbaoxie_rs1 = home_special.test_texts(text_mbx, mianbaoxie2)
             if mianbaoxie_rs1[0] is False:
                 result = False
                 msg = msg + mianbaoxie_rs1[1]
-            sanji1_rs2=home_special.test_contain_texts(text_sanji, sanji2_text)
+            sanji1_rs2 = home_special.test_contain_texts(text_sanji, sanji2_text)
             if sanji1_rs2[0] is False:
                 result = False
                 msg = msg + sanji1_rs2[1]
@@ -1083,30 +1426,30 @@ class SearchResult(BaseMenus):
         if xpath3 is not '':
             self.click_loc(loc_sanji)
             sleep(1)
-            mianbaoxie_rs2=home_special.test_texts(text_mbx, mianbaoxie3)
+            mianbaoxie_rs2 = home_special.test_texts(text_mbx, mianbaoxie3)
             if mianbaoxie_rs2[0] is False:
                 result = False
                 msg = msg + mianbaoxie_rs2[1]
         return result, msg
 
-    def delete_fenlei(self,xpath1,xpath3,level,mianbaoxie):
+    def delete_fenlei(self, xpath1, xpath3, level, mianbaoxie):
         """搜索结果页删除分类"""
-        result=True
-        msg=''
+        result = True
+        msg = ''
         # level = int(level)
-        loc_yiji=('xpath',xpath1)
+        loc_yiji = ('xpath', xpath1)
         self.click_loc(loc_yiji)
         sleep(1)
-        loc_sanji=('xpath',xpath3)
+        loc_sanji = ('xpath', xpath3)
         self.click_loc(loc_sanji)
         sleep(1)
         text_mbx = "//div[@class='col-lg-9 col-md-9']/ul/li/a/span"
         # level={4:"三级分类",3:"二级分类",2:"一级分类"}
-        loc_delete=('xpath','//div[@class="col-lg-9 col-md-9"]/ul/li[%s]/a/i' % level)
+        loc_delete = ('xpath', '//div[@class="col-lg-9 col-md-9"]/ul/li[%s]/a/i' % level)
         self.click_loc(loc_delete)
         sleep(1)
         home_special = HomeAndSpecial(self.driver)
-        mianbaoxie_rs= home_special.test_texts(text_mbx, mianbaoxie)
+        mianbaoxie_rs = home_special.test_texts(text_mbx, mianbaoxie)
         if mianbaoxie_rs[0] is False:
             result = False
             msg = msg + mianbaoxie_rs[1]
@@ -1126,24 +1469,3 @@ class SearchResult(BaseMenus):
             self.is_title_contains(u"商品搜索列表", timeout)
         except TimeoutException:
             Log().info(u"商品搜索结果页面未打开")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

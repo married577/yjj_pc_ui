@@ -327,7 +327,14 @@ class HomePage(BaseMenus):
     # 搜索历史列表中，被选中的商品
     __search_history_selected_loc = ('xpath', '//*[@id="searchHis"]/ul/li[contains(@style,"rgb(238, 244, 250)")]/a')
 
-    # 搜索
+    # 搜索框不输入，点击搜索按钮跳转到搜索页面
+    def search_jump(self):
+        self.click_loc(self.__search_button_loc)
+        sleep(1)
+        """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
+        self.switch_window()
+
+    # 搜索框输入，搜索
     def search_goods(self, keywords=''):
         sleep(2)
         self.move_to_element(self.__search_text_loc)
@@ -440,7 +447,7 @@ class HomePage(BaseMenus):
 
     # 左侧商品分类栏
     __prod_category_loc1 = ('xpath', '//div[@class="acc-title"]')
-    __prod_category_loc2 = ('xpath', '//div[@id="level1"]/div[1]/div[1]')
+    __prod_category_loc2 = ('xpath', '//div[@id="level1"]/div[1]/div[1]/span')
     __prod_category_loc3 = ('xpath', '//div[@class="ss-breadcrumbs-selected"]/div/span[1]')
 
     # 全部商品分类，选择第一个分类提取文本

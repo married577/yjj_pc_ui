@@ -15,9 +15,11 @@ from common.fileReader import IniUtil
 
 class MemberCenter(BaseMenus):
 
+    '''
     f = IniUtil()
     # 获取当前订单数据来源，返回1代表订单同步1.0，返回2代表订单同步2.0
     order_version = f.get_value_of_option('test_data', 'order_version')
+    '''
 
     # ======================================打开会员中心===========================================
     __member_page_url = CommonMethod().get_endpoint('memberpage')
@@ -25,6 +27,18 @@ class MemberCenter(BaseMenus):
     # 打开会员中心页面
     def open_center_page(self):
         self.open(self.__member_page_url, '个人中心')
+
+    __member_center_guidance_loc = ('xpath', '//div[@class="guide"]/div/div[4]')
+
+    # 会员中心引导步骤
+    def member_center_guidance(self):
+        try:
+            # 点击第一步
+            self.click_loc(self.__member_center_guidance_loc)
+            # 点击第二步
+            self.click_loc(self.__member_center_guidance_loc)
+        except TimeoutException:
+            pass
 
     # ======================================搜索模块===========================================
 
@@ -224,7 +238,7 @@ class MemberCenter(BaseMenus):
     # 退货/售后
 
     # 我的关注
-    __wdgz_loc = ('xpath', '//*[@id="gz_id"]')
+    __wdgz_loc = ('xpath', '//*[@id="sideBar"]/ul/li[2]/ul/li[1]/span')
 
     # 点击我的关注
     def click_wdgz(self):
@@ -233,6 +247,30 @@ class MemberCenter(BaseMenus):
             self.click_loc(self.__wdgz_loc)
         except TimeoutException:
             Log().info(u"未找到我的关注菜单！")
+
+    __wdgz_prodname = ('xpath', '//*[@id="pane-first"]/div/ul/li/ul/li/div/div[2]/div[1]')
+    __wdgz_storename = ('xpath', '//*[@id="pane-second"]/div/ul/li/div/div[2]')
+
+    # 我的关注列表商品页面，获取所有商品名称
+    def get_wdgz_prodname(self):
+        try:
+            text = self.get_text_for_elements(self.__wdgz_prodname)
+            return text
+        except TimeoutException:
+            Log().info(u"没有商品请先关注！")
+
+    __store_name_loc = ('xpath', '//*[@id="tab-second"]')
+
+    # 我的关注列表店铺页面，获取所有店铺名称
+    def get_wdgz_storename(self):
+        # 点击店铺列表
+        self.click_loc(self.__store_name_loc)
+        sleep(2)
+        try:
+            text = self.get_text_for_elements(self.__wdgz_storename)
+            return text
+        except TimeoutException:
+            Log().info(u"没有店铺请先关注！")
 
     # 我的缺货蓝
     __wdqhl_loc = ('xpath', '//*[@id="qhl_id"]')

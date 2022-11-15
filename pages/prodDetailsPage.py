@@ -74,7 +74,7 @@ class DetailsPage(BaseMenus):
     # 商品编码
     __prod_no_loc = ('xpath', "//div[@class='m_sec_bd']//dl/dt[contains(text(),'商品编码')]/following-sibling::dd")
     # 商品名称
-    __prod_name_loc = ('xpath', '//h3[@class="u_goods_tit"]')
+    __prod_name_loc = ('xpath', '//div[@class="gd-full_screen"]/div/div[2]/div[2]/h3/span[2]')
     # 商品价格 -- 采购价
     __prod_price_loc = ('xpath', '//span[contains(@class, "u_purc_price")]')
     # 参考零售价
@@ -85,6 +85,16 @@ class DetailsPage(BaseMenus):
     __prod_rate_loc = ('xpath', '//dl[@class="u_goods_item u_mtp"]//span[@class="u_retail_rate"]')
     # 商品剂型
     _prod_jixing_loc = ('xpath', '//div[@class="m_goods_mes"]//dt[text()="剂型"]/../dd')
+    # 第一个商品名称跳转
+    __detail_goods_name_loc = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
+
+    # 从搜索页面第一个商品，进入商品详情
+    def go_to_proddetail(self):
+        # 进入商品详情
+        self.click_loc(self.__detail_goods_name_loc)
+        # 切换最新窗口
+        self.switch_window()
+        sleep(2)
 
     # 获取详情页prodno
     def get_prodno(self):
@@ -92,9 +102,18 @@ class DetailsPage(BaseMenus):
 
     # 获取详情页prodname
     def get_prodname(self):
-        x = self.get_attribute_loc(self.__prod_name_loc, 'title').split('/')[0]
+        x = self.get_text_loc(self.__prod_name_loc)
         # 去掉获取商品名称的末尾的空格
-        return x.rstrip()
+        return x
+
+    __member_center_loc = ('xpath', '//*[@id="__layout"]/div/div/div[1]/div[1]/div/div[2]/span[3]')
+
+    # 进入会员中心
+    def get_member_center(self):
+        self.click_loc(self.__member_center_loc)
+        # 切换最新窗口
+        self.switch_window()
+        sleep(2)
 
     def get_purchase_price(self):
         """
@@ -135,16 +154,82 @@ class DetailsPage(BaseMenus):
         text = self.get_text_loc(self.__prod_rate_loc)
         return text
 
-    # ===========================================商品关注操作=====================================================
+    # ===========================================商品、店铺关注操作=====================================================
     # 关注logo
-    __link_loc = ('link text', u'关注')
-    # 点击关注
+    # __link_loc = ('link text', u'关注')
+    __link_loc = ('xpath', '//div[@class="gd-full_screen"]/div/div[2]/div[1]/div[3]/span')
+    __link_store_loc = ('xpath', '//div[@class="si-follow"]/button/span')
+
+    # 点击商品关注
+    def click_gz(self):
+        # 获取关注文本
+        text = self.get_text_loc(self.__link_loc)
+        if text == "关注":
+            self.click_loc(self.__link_loc)
+
+    # 点击店铺商品关注
+    def click_store_gz(self):
+        # 获取关注文本
+        text = self.get_text_loc(self.__link_store_loc)
+        if text == "关注":
+            self.click_loc(self.__link_store_loc)
+
+    # 获取商品关注文本，点击关注,查看状态并恢复
     def gz(self):
+        # 获取关注文本
+        text1 = self.get_text_loc(self.__link_loc)
+        # 点击关注
         self.click_loc(self.__link_loc)
-        Log().info(u"点击关注按钮")
+        sleep(2)
+        # 点击后获取关注文本
+        text2 = self.get_text_loc(self.__link_loc)
+        # 还原关注状态
+        self.click_loc(self.__link_loc)
+        sleep(2)
+        # 获取关注文本
+        text3 = self.get_text_loc(self.__link_loc)
+        return text1, text2, text3
+
+    # 获取店铺关注文本，点击关注,查看状态并恢复
+    def store_gz(self):
+        # 获取关注文本
+        text1 = self.get_text_loc(self.__link_store_loc)
+        # 点击关注
+        self.click_loc(self.__link_store_loc)
+        sleep(2)
+        # 点击后获取关注文本
+        text2 = self.get_text_loc(self.__link_store_loc)
+        # 还原关注状态
+        self.click_loc(self.__link_store_loc)
+        sleep(2)
+        # 获取关注文本
+        text3 = self.get_text_loc(self.__link_store_loc)
+        return text1, text2, text3
+
+    __store_name_loc = ('xpath', '//div[@class="gd-full_screen"]/div/div[2]/div[3]/div[2]/div[2]/h3/span')
+
+    # 获取店铺名称
+    def get_store_name(self):
+        x = self.get_text_loc(self.__store_name_loc)
+        return x
+
+    __store_homepage_loc1 = ('xpath', '//div[@class="si-enter"]/button/span/span')
+    __store_homepage_loc2 = ('xpath', '//div[@class="shop-body"]/div[1]/div[2]/div/div[1]/div[1]')
+
+    # 店铺主页跳转,获取店铺主页店铺名称
+    def store_homepage(self):
+        # 点击进店逛逛
+        self.click_loc(self.__store_homepage_loc1)
+        # 切换窗口到最新窗口
+        self.switch_window()
+        sleep(2)
+        # 获取店铺主页，店铺名称
+        text = self.get_text_loc(self.__store_homepage_loc2)
+        return text
 
     # 点击关注之后，弹出消息
     __msg_loc = ('xpath', "//div[@id='layui-layer1']/div[@class='layui-layer-setwin']")
+
     # 获取弹出消息的文本
     def get_message_text(self):
         text = self.get_text_loc(self.__msg_loc)
