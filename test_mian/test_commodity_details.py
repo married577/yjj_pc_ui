@@ -51,6 +51,7 @@ class TestLogin():
         self.detailsPage.go_to_proddetail()
         sleep(2)
 
+    '''
     # 通过详情url直接打开页面跳转正确校验
     def test_direct_jump_url(self):
         # 获取详情页商品名称
@@ -151,7 +152,23 @@ class TestLogin():
         result1 = self.detailsPage.get_store_name()
         # 获取跳转到店铺主页的店铺名称
         result2 = self.detailsPage.store_homepage()
+        # 后退到商品详情
+        self.driver.back()
+        sleep(2)
+        assume(result1 == result2, "预期结果为：{1}，实际结果为：{0}".format(result1, result2))
+    '''
+    sleep(1)
+
+    # 点击药监局数据查询跳转正确校验
+    def test_click_drug_data(self):
+        # 点击跳转到药监局网站页面
+        self.detailsPage.click_drug_data()
+        sleep(2)
+        # 获取药监局网站标题，判断是否正确
+        # result = self.basepage.is_title_contains(title="国家药品监督管理局")        因为打开是空白的所有换断言方式
+        # 获取药监局url做对比
+        result = self.basepage.get_url()
         # 关闭当前页面，切换到最后面一个窗口
         self.basepage.close_and_switch_window()
         sleep(2)
-        assume(result1 == result2, "预期结果为：{1}，实际结果为：{0}".format(result1, result2))
+        assume(result == "https://www.nmpa.gov.cn/", "预期结果为：https://www.nmpa.gov.cn/，实际结果为：{0}".format(result))

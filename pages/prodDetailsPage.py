@@ -311,7 +311,7 @@ class DetailsPage(BaseMenus):
     # 器械注册证
     __Instrument_registration_certificate_loc = ('xpath', "//*[text()='器械注册证']")
     # 药监局数据查询
-    __link_drug_data = ('xpath', "//a[text()='药监局数据查询 ›']")
+    __link_drug_data = ('xpath', '//*[@id="pane-0"]/div/div[2]/p/a')
 
     # 根据字段名称检查商品详情页面某元素是否存在
     def check_exist_in_detail_page(self, field_name):
