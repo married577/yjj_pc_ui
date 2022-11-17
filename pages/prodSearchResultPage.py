@@ -76,7 +76,7 @@ class SearchResult(BaseMenus):
         text = self.get_attribute_loc(self.__search_text_loc, 'value')
         return text
 
-    __goods_name_loc = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
+    __goods_name_loc = ('xpath', '//div[@class="page search"]/div/div[2]/div/div[1]/div[1]/div/div[3]/span')
 
     # 获取商品列表第一个商品的商品名称
     def get_goods_name(self):

@@ -66,6 +66,23 @@ class HomePage(BaseMenus):
         except:
             pass
 
+    __expired_certificate_loc = ('xpath', '//div[@class="el-dialog__footer"]/span/button[1]/span')
+
+    # 首页证照过期
+    def home_expired_certificate(self):
+        try:
+            self.click_loc(self.__expired_certificate_loc)
+        except:
+            pass
+
+    __right_name_loc = ('xpath', '//div[@class="textAlignCenter"]/span')
+
+    # 获取右侧用户名
+    def get_right_name(self):
+        text = self.get_text_loc(self.__right_name_loc)
+        return text
+
+
     # 消息中心跳转
     __message_center_data1 = ('xpath',
                               '//*[@id="__layout"]/div/div/div[2]//div[@class="ph-icon_menus"]/div/div[1]/div/div[1]//div[@class="ph-menu"]/span[1]')
@@ -138,7 +155,7 @@ class HomePage(BaseMenus):
 
     # 右侧领劵中心跳转
     __right_coupon_center1 = ('xpath',
-                             '//div[@class="fastEntrance"][1]/div[1]')
+                              '//div[@class="fastEntrance"][1]/div[1]')
     __right_coupon_center2 = ('xpath', '//div[@class="ph-custom_content"]/div')
 
     def right__coupon_center(self):
@@ -151,7 +168,7 @@ class HomePage(BaseMenus):
 
     # 右侧常购清单跳转
     __right_often_buy1 = ('xpath',
-                             '//div[@class="fastEntrance"][1]/div[2]')
+                          '//div[@class="fastEntrance"][1]/div[2]')
     __right_often_buy2 = ('xpath', '//div[@class="ss-breadcrumbs"]/span')
 
     def right__often_buy(self):
@@ -164,7 +181,7 @@ class HomePage(BaseMenus):
 
     # 右侧帮忙中心跳转
     __right_help_center1 = ('xpath',
-                             '//div[@class="fastEntrance"][2]/div[1]')
+                            '//div[@class="fastEntrance"][2]/div[1]')
     __right_help_center2 = ('xpath', '//div[@class="ph-content"]/span')
 
     def right__help_center(self):
@@ -177,7 +194,7 @@ class HomePage(BaseMenus):
 
     # 右侧去还款跳转
     __right_repayment1 = ('xpath',
-                             '//div[@class="fastEntrance"][2]/div[2]')
+                          '//div[@class="fastEntrance"][2]/div[2]')
     __right_repayment2 = ('xpath', '//span[@class="title"]')
 
     def right__repayment(self):
@@ -190,7 +207,7 @@ class HomePage(BaseMenus):
 
     # 右侧发票管理跳转
     __right_invoice_management1 = ('xpath',
-                             '//div[@class="fastEntrance"][2]/div[3]')
+                                   '//div[@class="fastEntrance"][2]/div[3]')
     __right_invoice_management2 = ('xpath', '//div[@class="invoice-header"]/span')
 
     def right__invoice_management(self):
@@ -203,7 +220,7 @@ class HomePage(BaseMenus):
 
     # 顶部我的订单跳转
     __top_my_order1 = ('xpath',
-                             '//div[@class="content"]/div[@class="right"]/span[2]')
+                       '//div[@class="content"]/div[@class="right"]/span[2]')
     __top_my_order2 = ('xpath', '//div[@class="ph-paths"]/span[1]')
 
     def top_my_order(self):
@@ -216,7 +233,7 @@ class HomePage(BaseMenus):
 
     # 顶部会员中心跳转
     __top_member_center1 = ('xpath',
-                             '//div[@class="content"]/div[@class="right"]/span[3]')
+                            '//div[@class="content"]/div[@class="right"]/span[3]')
     __top_member_center2 = ('xpath', '//div[@class="ph-paths"]/span')
 
     def top_member_center(self):
@@ -229,7 +246,7 @@ class HomePage(BaseMenus):
 
     # 顶部客户服务跳转
     __top_customer_service1 = ('xpath',
-                             '//div[@class="content"]/div[@class="right"]/span[4]')
+                               '//div[@class="content"]/div[@class="right"]/span[4]')
     __top_customer_service2 = ('xpath', '//ul/li[@class="el-dropdown-menu__item"]')
     __top_customer_service3 = ('xpath', '//div[@class="ph-content"]/span')
 
@@ -317,7 +334,8 @@ class HomePage(BaseMenus):
     # 搜索框
     __search_text_loc = ('xpath', '//div[@class="yjj_page_header"]//div[@class="ph-si-el_input el-input"]/input')
     # 搜索按钮
-    __search_button_loc = ('xpath', '//div[@class="yjj_page_header"]//button[@class="el-button ph-si-btn el-button--default"]')
+    __search_button_loc = (
+    'xpath', '//div[@class="yjj_page_header"]//button[@class="el-button ph-si-btn el-button--default"]')
     # 搜索结果页面文本获取
     __search_result_loc = ('xpath', '//div[@class="ss-breadcrumbs"]/span[2]')
     # 搜索历史模块

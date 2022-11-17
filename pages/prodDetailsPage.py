@@ -12,7 +12,7 @@ class DetailsPage(BaseMenus):
 
     # ==================================================搜索=====================================================
     # 搜索框
-    __search_text_loc = ('xpath', '//*[@id="searchText"]')
+    __search_text_loc = ('xpath', '//*[@id="__layout"]/div/div/div[2]/div/div/div[2]/div[1]/div/div/div[1]/input')
     __search_button_loc = ('xpath', "//div[@class='m_sch_btn']/button")
 
     # ==============================================打开主页=====================================================
@@ -32,8 +32,8 @@ class DetailsPage(BaseMenus):
         self.enter_key(self.__search_text_loc)
         # self.click_loc(self.__search_button_loc)
         # 等待页面跳转到搜索结果页面
-        self.wait_title_change('商品搜索列表', timeout=30)
-        Log().info(u'跳转到商品搜索列表页面')
+        # self.wait_title_change('商品搜索列表', timeout=30)
+        # Log().info(u'跳转到商品搜索列表页面')
         from pages.prodSearchResultPage import SearchResult
         return SearchResult(self.driver)
 
@@ -235,6 +235,16 @@ class DetailsPage(BaseMenus):
         text = self.get_text_loc(self.__msg_loc)
         return text
 
+    __yjj_icon_loc = ('xpath', '//*[@id="__layout"]/div/div/div[2]/div/div/div[1]/div/img')
+
+    # 药九九图标跳转
+    def yjj_icon_skip(self):
+        # 点击药九九图标
+        self.click_loc(self.__yjj_icon_loc)
+        # 切换到最新窗口
+        self.switch_window()
+        sleep(2)
+
     # ===========================================商品加购操作=====================================================
     # 加购物车
     __add_button_loc = ('xpath', '//dd/div[@class="m_goods_acti_ft"]/button')
@@ -418,7 +428,7 @@ class DetailsPage(BaseMenus):
         return actual_text
 
     # 咨询客服按钮
-    __consulting_customer_servise = ('xpath', "//a[@class='u_quick_opra u_opra_consult']")
+    __consulting_customer_servise = ('xpath', '//div[@class="si-customer_service"]/button/span')
 
     def check_page_after_click_customer_servise(self):
         """
@@ -429,6 +439,15 @@ class DetailsPage(BaseMenus):
         self.click_loc(self.__consulting_customer_servise)
         Log().info(u"点击咨询客服")
         sleep(2)
+
+    __service_page_text_loc = ('xpath', '//div[@id="em-kefu-webim-chat"]//span[@class="em-widget-header-nickname"]')
+
+    # 客服页面校验文本获取
+    def get_service_page_text(self):
+        Log().info(u"店铺客服页面")
+        # 获取校验文本
+        text = self.get_text_loc(self.__service_page_text_loc)
+        return text
 
     # ================================================商品店铺操作================================================
 

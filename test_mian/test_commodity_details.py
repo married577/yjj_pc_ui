@@ -42,7 +42,10 @@ class TestLogin():
         # homepage = self.loginpage.login_homepage(username, password)
         # 通过cookies注入登录
         self.loginpage.login_homepage_by_cookies()
+        # 首页引导
         self.home.home_page_guidance()
+        # 首页证照过期
+        self.home.home_expired_certificate()
         result1 = self.home.get_top_username()  # 获取首页登录店铺名称
         assume(result1 == username, "预期结果为：{1}，实际结果为：{0}".format(result1, username))
         # 跳转到搜索页面
@@ -50,7 +53,6 @@ class TestLogin():
         # 进入商品详情
         self.detailsPage.go_to_proddetail()
         sleep(2)
-
     '''
     # 通过详情url直接打开页面跳转正确校验
     def test_direct_jump_url(self):
@@ -154,9 +156,9 @@ class TestLogin():
         result2 = self.detailsPage.store_homepage()
         # 后退到商品详情
         self.driver.back()
-        sleep(2)
+        sleep(3)
         assume(result1 == result2, "预期结果为：{1}，实际结果为：{0}".format(result1, result2))
-    '''
+
     sleep(1)
 
     # 点击药监局数据查询跳转正确校验
@@ -172,3 +174,53 @@ class TestLogin():
         self.basepage.close_and_switch_window()
         sleep(2)
         assume(result == "https://www.nmpa.gov.cn/", "预期结果为：https://www.nmpa.gov.cn/，实际结果为：{0}".format(result))
+
+    sleep(1)
+
+    # 点击店铺客服跳转正确校验
+    def test_customer_servise(self):
+        # 点击店铺客服
+        self.detailsPage.check_page_after_click_customer_servise()
+        # 切换到最新窗口
+        self.basepage.switch_window()
+        sleep(3)
+        # 客服页面获取校验文本
+        result = self.detailsPage.get_service_page_text()
+        # 关闭当前页面，切换到最后面一个窗口,回到商品详情页面
+        self.basepage.close_and_switch_window()
+        sleep(2)
+        assume(result == "小九在线客服", "预期结果为：小九在线客服，实际结果为：{0}".format(result))
+
+    sleep(1)
+
+    # 药九九图标跳转验证
+    def test_yjj_icon_skip(self):
+        # 点击药九九图标
+        self.detailsPage.yjj_icon_skip()
+        # 获取首页右侧用户名
+        result = self.home.get_right_name()
+        # 后退到商品详情
+        self.driver.back()
+        sleep(2)
+        assume(result == username, "预期结果为：{1}，实际结果为：{0}".format(result, username))
+
+    sleep(1)
+    '''
+
+    # 商品详情输入框点击搜索跳转和搜索正确校验
+    def test_detail_input_box(self):
+        # 获取商品详情里面的，商品名称
+        result1 = self.detailsPage.get_prodname()
+        # 商品详情输入框输入
+        self.detailsPage.search_goods(keywords=result1)
+        # 切换到最新窗口
+        self.basepage.wait_and_switch_window()
+        sleep(3)
+        # 获取搜索页面，搜索结果商品名称
+        result2 = self.searchpage.get_goods_name()
+        # 关闭当前页面，切换到最后面一个窗口,回到商品详情页面
+        self.basepage.close_and_switch_window()
+        sleep(30)
+        print(result1)
+        print(result2)
+        assume(result1 in result2, "预期结果为：{0}，实际结果为：{1}".format(result1, result2))
