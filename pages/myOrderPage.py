@@ -5,6 +5,7 @@ from common.log import Log
 from pages.topCommonMenu.baseMenus import BaseMenus
 from common.updateDataFromDB import OperationInDB
 from common.fileReader import IniUtil
+from time import sleep
 
 
 class MyOrder(BaseMenus):
@@ -21,18 +22,20 @@ class MyOrder(BaseMenus):
     # 我的订单页面第一条记录的订单状态
     __first_order_status = ('xpath', '//ul[@class="m_b_status_c"]/li[1]//li[@class="col-md-2 orderStatusDesc"]')
     # 第一个订单查看链接
-    __first_order_button = ('xpath', '//*[text()="查看"][1]')
+    __first_order_button = ('xpath', '//li[@class="li-cont"][1]//div[text()="查看详情"]')
 
     # 点击第一个订单进入订单详情页，并返回driver
     def go_to_frist_order_detail(self):
         # 点击第一个订单进入订单详情页
         self.js_focus_element_loc(self.__first_order_button, bottom=False)
         self.click_loc(self.__first_order_button)
+        self.switch_window()
+        sleep(2)
         # 等待页面跳转
-        self.wait_title_change("订单详情页")
+        # self.wait_title_change("订单详情页")
         # 返回订单详情页page
-        from pages.orderDetailsPage import OrderDetails
-        return OrderDetails(self.driver)
+        # from pages.orderDetailsPage import OrderDetails
+        # return OrderDetails(self.driver)
 
     # 获取订单列表
     def get_order_list(self):
@@ -162,4 +165,11 @@ class MyOrder(BaseMenus):
             self.click_loc(self.__order_prod_agaiin_add_loc)
         except:
             Log().info('点击此次购买错误')
+
+    __my_car_loc = ("xpath",'//div[@class="ph-icon_menus"]/div/div[2]/div/img[1]')
+
+    # 点击购物车图标
+    def click_my_car(self):
+        self.click_loc(self.__my_car_loc)
+        sleep(2)
 

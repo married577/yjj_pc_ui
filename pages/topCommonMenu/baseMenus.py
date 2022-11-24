@@ -12,7 +12,7 @@ class BaseMenus(Action):
     # 退出
     __log_out_loc = ('xpath', '//a[@class="u_quit"]')
     # 我的订单
-    __my_order_loc = ('xpath', '//ul[@class="m_menu_group"]//a[text()="我的订单"]')
+    __my_order_loc = ('xpath', '//div[@class="right"]/span[text()="我的订单"]')
     # 返回首页
     __back_to_homepage_loc = ('xpath', '//*[@id="goBackHome"]')
     # 我的购物车
@@ -35,11 +35,13 @@ class BaseMenus(Action):
         :return: 返回我的订单页的page对象
         """
         self.click_loc(self.__my_order_loc)
+        self.switch_window()
+        sleep(2)
         # 当前窗口数量
-        windows_handles = self.get_windows_num()
-        if windows_handles > 1:
-            self.close_and_switch_window()
-        self.wait_title_change('我的订单')
+        # windows_handles = self.get_windows_num()
+        # if windows_handles > 1:
+        #     self.close_and_switch_window()
+        # self.wait_title_change('我的订单')
         Log().info("点击顶部的我的订单，跳转到我的订单页面")
         from pages.myOrderPage import MyOrder
         return MyOrder(self.driver)

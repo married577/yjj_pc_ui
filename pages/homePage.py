@@ -82,7 +82,6 @@ class HomePage(BaseMenus):
         text = self.get_text_loc(self.__right_name_loc)
         return text
 
-
     # 消息中心跳转
     __message_center_data1 = ('xpath',
                               '//*[@id="__layout"]/div/div/div[2]//div[@class="ph-icon_menus"]/div/div[1]/div/div[1]//div[@class="ph-menu"]/span[1]')

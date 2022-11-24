@@ -372,11 +372,12 @@ class SearchResult(BaseMenus):
 
     __goods_purchased_loc1 = ('xpath', '//div[@class="page search"]/div/div[2]/div/div[1]/div[1]/div/div[8]/div/div[2]/div')
     __goods_purchased_loc2 = ('xpath', '//div[@class="page search"]/div/div[2]/div/div[1]/div[1]/div/div[9]/button')
-    __goods_purchased_loc3 = ('xpath', '/html/body/div[3]/p')
+    __goods_purchased_loc3 = ('xpath', '/html/body/div[@role="alert"]/p')
 
     # 列表商品加购，加购第一个商品
     def first_goods_purchased(self):
         try:
+            self.js_focus_element_loc(self.__goods_purchased_loc1)
             # 点击商品加购,2次
             self.click_loc(self.__goods_purchased_loc1)
             self.click_loc(self.__goods_purchased_loc2)

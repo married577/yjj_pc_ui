@@ -247,7 +247,7 @@ class DetailsPage(BaseMenus):
 
     # ===========================================商品加购操作=====================================================
     # 加购物车
-    __add_button_loc = ('xpath', '//dd/div[@class="m_goods_acti_ft"]/button')
+    __add_button_loc = ('xpath', '//*[@id="addToCartButton"]')
     # 商品数量
     __prod_quantity_loc = ('xpath', '//*[@id="merchandiseNumber"]')
     # 加号
@@ -256,11 +256,32 @@ class DetailsPage(BaseMenus):
     __minus_loc = ('xpath', "//i[contains(@class,'fa-minus')]")
     # 商品单位
     __prod_unit_loc = ('xpath', "//div[@class='m_goods_nums_wrap']//span[@class='u_goods_unit']")
+    # 购物车
+    __my_cart_loc = ('xpath', '//*[@id="__layout"]/div/div/div[2]/div/div//div[3]/div/div[2]/div/span[1]')
+    # 加购提示
+    __add_hint_loc = ('xpath', '/html/body/div[@role="alert"]/p')
 
     def click_add_to_cart(self):
         """点击加购物车按钮"""
         self.click_loc(self.__add_button_loc)
         Log().info(u"点击加入购物车按钮")
+
+    def get_add_hint(self):
+        try:
+            # 获取加购成功提示
+            text = self.get_text_loc(self.__add_hint_loc)
+            return text
+        except TimeoutException:
+            print(u'没有定位到提示信息')
+
+    # 购物车页面跳转
+    def go_to_my_cart(self):
+        # 点击购物车跳转
+        self.click_loc(self.__my_cart_loc)
+        Log().info(u"进入购物车页面")
+        # 切换到最新窗口
+        self.switch_window()
+        sleep(3)
 
     # 编辑商品数量
     def modify_prod_num(self, num):

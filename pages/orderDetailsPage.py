@@ -122,12 +122,23 @@ class OrderDetails(Action):
 
     # *****************************************订单详情右侧操作*******************************************
 
+    __prod_name = ('xpath', '//li[@class="li"][1]/div[1]/div[1]/div[2]/div[1]')
+
+    # 提取商品名称
+    def get_prod_name(self):
+        text = self.get_text_loc(self.__prod_name)
+        return text
+
     # 再次购买元素
-    __buy_again = ('xpath', '//*[@id="shopAgain"]')
+    __buy_again = ('xpath', '//li[@class="li"][1]//div[contains(text(),"加入购物车")]')
+    __buy_again_text = ('xpath', '/html/body/div[@role="alert"]/p')
 
     # 点击再次购买
     def click_buy_again(self):
         self.click_loc(self.__buy_again)
+        # 获取加购成功提示消息
+        text = self.get_text_loc(self.__buy_again_text)
+        return text
 
     # ******************************************等待******************************************
 

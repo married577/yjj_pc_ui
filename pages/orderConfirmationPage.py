@@ -27,6 +27,30 @@ class OrderConfirmation(BaseMenus):
         self.click_by_mouse(self.__submit_button_loc)
         Log().info(u'点击提交订单')
 
+    __extract_title_loc = ('xpath', '//div[@class="content"]/span[@class="title"]')
+
+    # 提取结算页面title
+    def extract_title(self):
+        text = self.get_text_loc(self.__extract_title_loc)
+        return text
+
+    __all_prod_name = ('xpath', '//*[@id="__layout"]/div/div/div[3]/div[2]/div/div/div/ul/li/div[2]/div/div[1]/span[1]/span[1]')
+
+    # 获取页面所有商品名称
+    def get_all_prod_name(self):
+        text = self.get_text_for_elements(self.__all_prod_name)
+        return text
+
+    # 获取结算页面，指定商品的数量
+    def get_prod_amount(self, prod_name):
+        __prod_amount_loc = ('xpath', '//*[text()="%s"]/../../../div[3]/div/span' % prod_name)
+        try:
+            text = self.get_text_loc(__prod_amount_loc)
+            return text
+        except TimeoutException:
+            print("结算页面没有要结算商品:%s" % prod_name)
+
+
     # 选择线下结算,并提交订单
     def submit_order_offline(self):
         """

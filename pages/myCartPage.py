@@ -47,6 +47,12 @@ class MyCart(BaseMenus):
         text = self.get_text_for_elements(self.__all_goods_names_loc)
         return text
 
+    __yjj_icon_loc = ('xpath', '//div[@class="HeaderMember"]/div/img')
+
+    # 点击药九九图标，返回到首页
+    def yjj_icon(self):
+        self.click_loc(self.__yjj_icon_loc)
+
     def count_of_prods(self):
         """
         购物车商品总数（包含有效和失效商品）
@@ -115,7 +121,7 @@ class MyCart(BaseMenus):
 
     # =======================================购物车商品操作===============================
     # 全选按钮 -- 商品列表下面
-    __select_all = ('xpath', "//input[contains(@class, 'selectAll')]")
+    __select_all = ('xpath', '//*[@id="__layout"]/div/div/div[3]/div[1]/div[1]/div[2]/div[1]/div/span/label/span[1]/span')
     # 清空失效商品--最下面
     __clean_invalid_prods = ('xpath', '//a[@id="clear_abate"]')
     # 点击最下面的清空失效按钮弹框中的'清空失效商品按钮'
@@ -127,10 +133,46 @@ class MyCart(BaseMenus):
     # 商品的关注
     __follow_loc = ('xpath', '//a[@class="fragment3 ftchange add_attention_check"]')
 
+    # 购物车全选、取消按钮
+    def check_all_prod(self):
+        # 点击全选按钮，全部选中
+        self.click_loc(self.__select_all)
+        sleep(4)
+        # 再次点击全选按钮，取消全部选中
+        self.click_loc(self.__select_all)
+        sleep(4)
+
+    # 勾选指定商品
+    def check_appoint_prod(self, prod_name):
+        __appoint_prod_loc = ('xpath', '//*[text()="%s"]/../../div[1]/label/span/span' % prod_name)
+        self.click_loc(__appoint_prod_loc)
+        sleep(2)
+
+
     def goods_follow(self):
         """进行商品关注"""
         self.js_focus_element_loc(self.__follow_loc, bottom=False)
         self.click_loc(self.__follow_loc,10)
+
+    # 指定商品添加关注
+    def assign_goods_attention(self, prod_name):
+        __goods_attention_loc = ('xpath', '//*[text()="%s"]/../../..//*[text()="添加关注"]' % prod_name)
+        __goods_attention_hint = ('xpath', '/html/body/div[@role="alert"]/p')
+        # 点击添加关注
+        self.click_loc(__goods_attention_loc)
+        # 获取关注成功提示
+        text = self.get_text_loc(__goods_attention_hint)
+        return text
+
+    member_center_loc = ('xpath', '//div[@class="right"]/span[text()="会员中心"]')
+
+    # 进入会员中心
+    def go_to_membercenter(self):
+        # 点击会员中心
+        self.click_loc(self.member_center_loc)
+        # 切换窗口
+        self.switch_window()
+        sleep(3)
 
     def clean_prod_in_cart(self):
         """
@@ -237,9 +279,9 @@ class MyCart(BaseMenus):
 
     # 编辑商品数量
     def modify_prod_num(self, num, prod_no):
-        __prod_quantity_loc = ('xpath', '//input[@id="merchandiseNumber%s"]' % prod_no)
+        __prod_quantity_loc = ('xpath', '//*[text()="%s"]/../../../div[3]/div/div[1]/div/div/div/input' % prod_no)
         self.send_keys_loc(__prod_quantity_loc, num)
-        __prod_unit_loc = ('xpath', '//span[@id="packageunit%s"]' % prod_no)
+        __prod_unit_loc = ('xpath', '//*[text()="%s"]/../../../div[3]/div/div[3]' % prod_no)
         self.click_loc(__prod_unit_loc)
         Log().info(u"编辑商品数量，输入： %s" % num)
 
@@ -314,6 +356,22 @@ class MyCart(BaseMenus):
             result = False
         return result
 
+    # 删除指定商品
+    def remove_item(self, prod_name):
+        __item_loc = ('xpath', '//*[text()="%s"]/../../..//*[text()="删除"]' % prod_name)
+        __confirm_remove_loc = ('xpath', '//*[@id="commodity-details"]/div[1]//div[4]/div/div/div[3]/span/button[2]/span[text()="确 定"]')
+        __hint_remove_loc = ('xpath', '/html/body/div[@role="alert"]/p')
+        # 滑动到元素位置
+        self.js_focus_element_loc(__item_loc)
+        # 点击删除指定商品
+        self.click_loc(__item_loc)
+        sleep(2)
+        # 点击确认删除
+        self.click_loc(__confirm_remove_loc)
+        # 提取删除成功提示消息
+        text = self.get_text_loc(__hint_remove_loc)
+        return text
+
     # 去逛逛
     __go_to_search_loc = ('xpath', '//a[text()="去逛逛>"]')
     # 去加购
@@ -343,7 +401,7 @@ class MyCart(BaseMenus):
 
     # =======================================购物车去结算 ===============================
     # 提交订单按钮定位
-    __submit_loc = ('xpath', '//*[@id="submitOrder"]')
+    __submit_loc = ('xpath', '//div[@class="summary-box"]/button')
     # 商品总金额
     __total_price_loc = ('xpath', '//*[@id="totalPrice"]')
     # 立减金额
@@ -354,8 +412,20 @@ class MyCart(BaseMenus):
         点击提交订单按钮，因校验页面未跳转到下一页
         :return:
         """
+        self.js_focus_element_loc(self.__submit_loc)
         self.click_loc(self.__submit_loc)
         Log().info(u"点击提交订单")
+
+    __exemption_remind_loc = ('xpath', '//div[@class="el-dialog__body"]/div[text()="提交订单"]')
+
+    # 去结算包邮提醒
+    def submit_exemption_remind(self):
+        try:
+            # 点击包邮提醒，提交订单按钮
+            self.click_loc(self.__exemption_remind_loc)
+            sleep(3)
+        except TimeoutException:
+            pass
 
     def submit_order(self):
         """

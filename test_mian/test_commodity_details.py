@@ -53,7 +53,7 @@ class TestLogin():
         # 进入商品详情
         self.detailsPage.go_to_proddetail()
         sleep(2)
-    '''
+
     # 通过详情url直接打开页面跳转正确校验
     def test_direct_jump_url(self):
         # 获取详情页商品名称
@@ -206,7 +206,6 @@ class TestLogin():
 
     sleep(1)
     '''
-
     # 商品详情输入框点击搜索跳转和搜索正确校验
     def test_detail_input_box(self):
         # 获取商品详情里面的，商品名称
@@ -224,3 +223,23 @@ class TestLogin():
         print(result1)
         print(result2)
         assume(result1 in result2, "预期结果为：{0}，实际结果为：{1}".format(result1, result2))
+    '''
+    # 商品详情加购校验
+    def test_add_to_cart(self):
+        # 获取商品名称
+        result1 = self.detailsPage.get_prodname()
+        # 点击加入购物车
+        self.detailsPage.click_add_to_cart()
+        # 获取加购成功提示消息
+        result = self.detailsPage.get_add_hint()
+        assume(result == "加购成功！", "预期结果为：加购成功！，实际结果为：{0}".format(result))
+        # 跳转到购物车页面
+        self.detailsPage.go_to_my_cart()
+        sleep(2)
+        # 获取购物车列表商品名称
+        result2 = self.mycar.all_goods_names()
+        assume(result1 in result2, "预期结果为：{0}，实际结果为：{1}".format(result1, result2))
+        # 关闭当前页面，切换到最后面一个窗口,回到商品详情页面
+        self.detailsPage.close_and_switch_window()
+        sleep(2)
+

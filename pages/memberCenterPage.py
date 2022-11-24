@@ -259,6 +259,21 @@ class MemberCenter(BaseMenus):
         except TimeoutException:
             Log().info(u"没有商品请先关注！")
 
+    # 我的关注-取消关注商品
+    def deselect_gz_prodname(self, prod_name):
+        __deselect_gz_loc = ('xpath', '//div[@class="goods-cont"]//div[contains(text(),"%s")]/../../../div/div[4]/button/span[text()="取消关注"]'% prod_name)
+        __deselect_confirm_loc = ('xpath', '//div[@class="el-dialog__footer"]/span/button[2]')
+        __confirm_hint_loc = ('xpath', '/html/body/div[@role="alert"]/p')
+        self.js_focus_element_loc(__deselect_gz_loc)
+        # 点击取消按钮
+        self.click_loc(__deselect_gz_loc)
+        sleep(1)
+        # 点击取消确认
+        self.click_loc(__deselect_confirm_loc)
+        # 提取取消提示信息
+        text = self.get_text_loc(__confirm_hint_loc)
+        return text
+
     __store_name_loc = ('xpath', '//*[@id="tab-second"]')
 
     # 我的关注列表店铺页面，获取所有店铺名称
