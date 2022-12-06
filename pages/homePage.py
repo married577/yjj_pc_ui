@@ -333,8 +333,7 @@ class HomePage(BaseMenus):
     # 搜索框
     __search_text_loc = ('xpath', '//div[@class="yjj_page_header"]//div[@class="ph-si-el_input el-input"]/input')
     # 搜索按钮
-    __search_button_loc = (
-    'xpath', '//div[@class="yjj_page_header"]//button[@class="el-button ph-si-btn el-button--default"]')
+    __search_button_loc = ('xpath', '//span[contains(text(),"所有商品")]')
     # 搜索结果页面文本获取
     __search_result_loc = ('xpath', '//div[@class="ss-breadcrumbs"]/span[2]')
     # 搜索历史模块
@@ -346,8 +345,9 @@ class HomePage(BaseMenus):
 
     # 搜索框不输入，点击搜索按钮跳转到搜索页面
     def search_jump(self):
+        self.js_focus_element_loc(self.__search_button_loc)
         self.click_loc(self.__search_button_loc)
-        sleep(1)
+        sleep(3)
         """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
         self.switch_window()
 

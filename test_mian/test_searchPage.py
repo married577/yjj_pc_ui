@@ -1,3 +1,4 @@
+"""搜索页面case"""
 # coding:utf-8
 from pages.loginPage import LoginPage
 from common.commonMethod import CommonMethod

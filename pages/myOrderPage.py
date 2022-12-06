@@ -37,11 +37,84 @@ class MyOrder(BaseMenus):
         # from pages.orderDetailsPage import OrderDetails
         # return OrderDetails(self.driver)
 
+    # 点击图片，跳转到订单详情
+    def click_order_picture(self, text):
+        __order_picture_loc = ('xpath', '//div[contains(text(),"%s")]/../../../div/div[2]/div[1]/img' % text)
+        self.click_loc(__order_picture_loc)
+        self.switch_window()
+        sleep(2)
+
+    # 点击订单号码，跳转到订单详情
+    def click_order_number(self, text):
+        __order_number_loc = ('xpath', '//div[contains(text(),"%s")]' % text)
+        self.click_loc(__order_number_loc)
+        self.switch_window()
+        sleep(2)
+
+    # 点击订单店铺，跳转到店铺列表
+    def click_store_name(self):
+        __store_name_loc = ('xpath', '//*[@id="__layout"]/div/div/div[3]/div[2]/div/div[2]/ul/li/div/div[1]/div[3]')
+        __get_store_name = ('xpath', '//div[@class="shop-body"]/div[1]/div[2]/div/div[1]/div[1]')
+        self.click_loc(__store_name_loc)
+        self.switch_window()
+        sleep(3)
+        result = self.get_text_loc(__get_store_name)
+        return result
+
+    # 点击和我联系，跳转到客服列表
+    def click_relation_and_me(self, text):
+        __relation_and_me_loc = ('xpath', '//div[contains(text(),"%s")]/../../../div/div[1]/div[3]/span' % text)
+        __service_name_loc = ('xpath', '//span[@class="em-widget-header-nickname"]')
+        self.click_loc(__relation_and_me_loc)
+        self.switch_window()
+        sleep(5)
+        result = self.get_text_loc(__service_name_loc)
+        return result
+
+    # 取消订单
+    def cancellation_of_order(self, text):
+        __cancellation_button_loc = ('xpath', '//div[contains(text(),"%s")]/../../../div/div[2]/div[5]/div[2]' % text)
+        __select_reason_loc = ('xpath', '//*[@id="wrapper"]/div/div[1]/div')
+        __confirm_button_loc = ('xpath', '//div[contains(text(),"%s")]/../../..//span[text()="确认取消"]' % text)
+        # 点击取消按钮
+        self.click_loc(__cancellation_button_loc)
+        sleep(1)
+        # 选择取消原因
+        self.click_loc(__select_reason_loc)
+        sleep(1)
+        # 点击确认取消按钮
+        self.click_loc(__confirm_button_loc)
+
+    # 删除订单
+    def delete_order(self, text):
+        __delete_order_button = ('xpath', '//div[contains(text(),"%s")]/../../..//div[contains(text(),"删除订单")]' % text)
+        __confirm_button = ('xpath', '//div[contains(text(),"%s")]/../../../div/div[3]/div/div/div[3]/span/button[2]' % text)
+        __get_delete_hint = ('xpath', '/html/body/div[@role="alert"]/p')
+        self.click_loc(__delete_order_button)
+        sleep(1)
+        self.click_loc(__confirm_button)
+        # 获取删除成功提示
+        text = self.get_text_loc(__get_delete_hint)
+        return text
+
+    # 获取订单状态
+    def order_state(self, text):
+        __order_state_loc = ('xpath', '//div[contains(text(),"%s")]/../../../div/div[2]/div[4]/div[1]' % text)
+        state = self.get_text_loc(__order_state_loc)
+        return state
+
     # 获取订单列表
     def get_order_list(self):
         order_list = []
         order_list = self.find_elements(self.__order2_list_loc)
         return order_list
+
+    __first_order_number = ('xpath', '//*[@id="__layout"]/div/div/div[3]/div[2]/div/div[2]/ul/li/div/div[1]/div[2]')
+
+    # 获取第一个订单，订单号
+    def get_first_order_number(self):
+        order_number = self.get_text_loc(self.__first_order_number)
+        return order_number
 
     def is_pay_now_button_display(self):
         """
@@ -144,13 +217,13 @@ class MyOrder(BaseMenus):
             Log().info('选择订单时间类型错误')
 
     # 我的订单页面搜索元素
-    __my_order_searcg_loc = ('xpath','//input[@id="searchQuery"]')
+    __my_order_searcg_loc = ('xpath', '//*[@id="__layout"]/div/div/div[3]/div[2]/div/div[2]/div[2]/input')
 
-    def custom_order_search(self,code):
+    def custom_order_search(self, code):
         """进行订单搜索"""
         try:
             self.js_focus_element_loc(self.__my_order_searcg_loc)
-            self.send_keys_loc(self.__my_order_searcg_loc,code)
+            self.send_keys_loc(self.__my_order_searcg_loc, code)
             self.enter_key(self.__my_order_searcg_loc)
         except:
             Log().info('我的订单页面进行订单搜索错误')

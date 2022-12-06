@@ -1,3 +1,4 @@
+"""商品详情页面测试case"""
 # coding:utf-8
 from pages.loginPage import LoginPage
 from common.commonMethod import CommonMethod

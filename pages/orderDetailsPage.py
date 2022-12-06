@@ -4,6 +4,7 @@ from common.basePage import Action
 from selenium.common.exceptions import TimeoutException
 from common.fileReader import IniUtil
 from common.log import Log
+from time import sleep
 
 
 class OrderDetails(Action):
@@ -129,16 +130,63 @@ class OrderDetails(Action):
         text = self.get_text_loc(self.__prod_name)
         return text
 
-    # 再次购买元素
+    # 加入购物车元素
     __buy_again = ('xpath', '//li[@class="li"][1]//div[contains(text(),"加入购物车")]')
     __buy_again_text = ('xpath', '/html/body/div[@role="alert"]/p')
 
-    # 点击再次购买
+    # 点击加入购物车
     def click_buy_again(self):
         self.click_loc(self.__buy_again)
         # 获取加购成功提示消息
         text = self.get_text_loc(self.__buy_again_text)
         return text
+
+    __order_number_loc = ('xpath', '//div[@class="top"]')
+
+    # 获取详情页订单编号
+    def get_order_number1(self):
+        x = self.get_text_loc(self.__order_number_loc)
+        # 去掉获取商品名称的末尾的空格
+        return x
+
+    __contact_merchant_loc = ('xpath', '//*[text()="联系商家"]')
+    __service_name_loc = ('xpath', '//span[@class="em-widget-header-nickname"]')
+
+    # 点击联系商家
+    def click_contact_merchant(self):
+        self.js_focus_element_loc(self.__contact_merchant_loc)
+        self.click_loc(self.__contact_merchant_loc)
+        self.switch_window()
+        sleep(3)
+        text = self.get_text_loc(self.__service_name_loc)
+        return text
+
+    __buy_again_button_loc = ('xpath', '//div[contains(text(),"再次购买")]')
+
+    # 点击再次购买
+    def click_again_bug(self):
+        self.js_focus_element_loc(self.__buy_again_button_loc)
+        self.click_loc(self.__buy_again_button_loc)
+
+    __cancellation_order_button_loc = ('xpath', '//div[contains(text(),"取消订单")]')
+    __select_reason_loc = ('xpath', '//*[@id="wrapper"]/div/div[1]/div')
+    __affirm_cancellation_loc = ('xpath', '//span[text()="确认取消"]')
+    __cancellation_hint_loc = ('xpath', '/html/body/div[@role="alert"]/p')
+
+    # 点击取消订单
+    def click_cancellation_order(self):
+        self.js_focus_element_loc(self.__cancellation_order_button_loc)
+        self.click_loc(self.__cancellation_order_button_loc)
+        sleep(2)
+        # 选择取消原因
+        self.click_loc(self.__select_reason_loc)
+        sleep(1)
+        # 确认取消
+        self.click_loc(self.__affirm_cancellation_loc)
+        # 提取取消提示
+        text = self.get_text_loc(self.__cancellation_hint_loc)
+        return text
+
 
     # ******************************************等待******************************************
 

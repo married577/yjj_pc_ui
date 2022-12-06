@@ -1,3 +1,4 @@
+"""购物车页面case"""
 # coding:utf-8
 from pages.loginPage import LoginPage
 from common.commonMethod import CommonMethod

@@ -148,7 +148,6 @@ class MyCart(BaseMenus):
         self.click_loc(__appoint_prod_loc)
         sleep(2)
 
-
     def goods_follow(self):
         """进行商品关注"""
         self.js_focus_element_loc(self.__follow_loc, bottom=False)

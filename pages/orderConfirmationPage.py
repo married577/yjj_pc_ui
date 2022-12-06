@@ -15,6 +15,39 @@ class OrderConfirmation(BaseMenus):
     __submit_button_loc = ('xpath', '//div/button[text()="提交订单"]')
     # 二维码
     __erweima_img_loc = ('xpath', '//div[@class="u_code_img"][1]')
+    # 选择账期支付
+    __payment_days_loc = ('xpath', '//div[@class="box payment"]/label[2]')
+    # 提交订单
+    __submit_order_loc = ('xpath', '//*[text()="提交订单"]')
+
+    # 选择账期支付方式
+    def select_payment_days(self):
+        try:
+            # self.js_focus_element_loc(self.__payment_days_loc)
+            # self.click_loc(self.__payment_days_loc)
+            element = self.find_element(self.__payment_days_loc)
+            self.driver.execute_script("arguments[0].click();", element)
+        except TimeoutException:
+            print("未配置账期支付，请先配置账期支付")
+
+    # 点击提交订单按钮
+    def click_submit_order(self):
+        try:
+            self.click_loc(self.__submit_order_loc)
+        except TimeoutException:
+            print("没有定位到提交订单按钮")
+
+    __pay_success_hint = ('xpath', '//div[@class="backTit_content"]/div')
+    __pay_way_loc = ('xpath', '//span[contains(text(),"支付方式")]/following-sibling::*')
+
+    # 支付成功和支付方式提取
+    def get_pay_way(self):
+        try:
+            text1 = self.get_text_loc(self.__pay_success_hint)
+            text2 = self.get_text_loc(self.__pay_way_loc)
+            return text1, text2
+        except TimeoutException:
+            print("没有定位到支付成功元素，可能是支付失败了")
 
     # 选中线上支付（不使用余额），并提交订单，返回应付金额
     def submit_order(self):
@@ -33,6 +66,22 @@ class OrderConfirmation(BaseMenus):
     def extract_title(self):
         text = self.get_text_loc(self.__extract_title_loc)
         return text
+
+    __order_number_loc = ('xpath', '//div[@class="content"]/div/div[2]/div[4]/span[2]/i')
+
+    # 提取订单编号
+    def get_order_number(self):
+        text = self.get_text_loc(self.__order_number_loc)
+        return text
+
+    __look_order_loc = ('xpath', '//*[text()="查看订单"]')
+
+    # 点击查看订单-计入我的订单列表
+    def click_look_order(self):
+        try:
+            self.click_loc(self.__look_order_loc)
+        except TimeoutException:
+            print('没有查找到元素，请检查定位元素是否正确')
 
     __all_prod_name = ('xpath', '//*[@id="__layout"]/div/div/div[3]/div[2]/div/div/div/ul/li/div[2]/div/div[1]/span[1]/span[1]')
 

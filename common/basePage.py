@@ -369,7 +369,7 @@ class Action(object):
             values.append(value)
         return values
 
-    def get_text_loc(self, locator, timeout=3):
+    def get_text_loc(self, locator, timeout=10):
         """获取文本 - 参数为locator"""
         element = self.find_element(locator, timeout)
         return element.text
@@ -464,6 +464,7 @@ class Action(object):
     def switch_window(self, num=-1):
         """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
         handles = self.driver.window_handles
+        print(handles)
         self.driver.switch_to.window(handles[num])
 
     def wait_and_switch_window(self, num=-1, timeout=20):

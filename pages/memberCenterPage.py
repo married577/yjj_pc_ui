@@ -154,6 +154,36 @@ class MemberCenter(BaseMenus):
         from pages.paymentProcessPages.receivedPayments.receivedPaymentsPaymentPage import ReceivedPaymentsPayment
         return ReceivedPaymentsPayment(self.driver)
 
+    __coupon_button_loc = ('xpath', '//div[@class="coupon"]/div[@class="mt"]/span[2]')
+    __get_coupon_centre = ('xpath', '//*[@id="__layout"]/div/div/div[2]/div/div/div[2]/div')
+
+    # 点击领劵
+    def click_coupon_button(self):
+        self.click_loc(self.__coupon_button_loc)
+        sleep(3)
+        text = self.get_text_loc(self.__get_coupon_centre)
+        return text
+
+    __details_view_loc = ('xpath', '//div[@class="balance"]/div[@class="mt"]/span[2]')
+    __get_details_loc = ('xpath', '//div[@class="count-title"]')
+
+    # 点击查看明细
+    def click_details_view(self):
+        self.click_loc(self.__details_view_loc)
+        sleep(3)
+        text = self.get_text_loc(self.__get_details_loc)
+        return text
+
+    __repayment_loc = ('xpath', '//div[@class="arrears"]/div[@class="mt"]/span[2]')
+    __get_repayment_loc = ('xpath', '//span[@class="title"]')
+
+    # 点击还款
+    def click_repayment(self):
+        self.click_loc(self.__repayment_loc)
+        sleep(3)
+        text = self.get_text_loc(self.__get_repayment_loc)
+        return text
+
     # 左侧我的优惠券链接
     __my_coupon_link_loc = ('xpath', '//*[@id="coupon_id"]')
 
@@ -225,17 +255,126 @@ class MemberCenter(BaseMenus):
             Log().info(u"未找到我的订单菜单！")
 
     # 历史采购
-    __lscg_loc = ('xpath', '//a[text()="历史采购"]')
+    __lscg_loc = ('xpath', '//span[text()="历史采购"]')
+    __lscg_text_loc = ('xpath', '//div[@class="historyTitle"]/span[@class="title"]')
 
     # 点击历史采购
     def click_lscg(self):
         try:
             self.js_focus_element_loc(self.__lscg_loc)
             self.click_loc(self.__lscg_loc)
+            text = self.get_text_loc(self.__lscg_text_loc)
+            return text
         except TimeoutException:
             Log().info(u"未找到历史采购菜单！")
 
-    # 退货/售后
+    # 缺货篮
+    __wdqhl_loc = ('xpath', '//*[@id="sideBar"]/ul/li[2]/ul/li[2]/span')
+    __wdqhl_text_loc = ('xpath', '//div[@class="ph-paths"]/span[text()="我的缺货篮"]')
+
+    # 关注中心-点击我的缺货篮
+    def click_wdqhl(self):
+        try:
+            self.js_focus_element_loc(self.__wdqhl_loc)
+            self.click_loc(self.__wdqhl_loc)
+            text = self.get_text_loc(self.__wdqhl_text_loc)
+            return text
+        except TimeoutException:
+            Log().info(u"未找到我的缺货篮菜单！")
+
+    # 订单中心-点击退货/售后跳转
+    __sales_return_loc = ('xpath', '//span[text()="退货/售后"]')
+    __sales_return_text_loc = ('xpath', '//div[@class="top"]/span[1]')
+
+    def click_sales_return(self):
+        try:
+            self.js_focus_element_loc(self.__sales_return_loc)
+            self.click_loc(self.__sales_return_loc)
+            text = self.get_text_loc(self.__sales_return_text_loc)
+            return text
+        except TimeoutException:
+            Log().info(u"未找到我的关注菜单！")
+
+    # 订单中心-点击退货/售后-售后申请列表搜索
+    def sales_return_application_list(self):
+        __extract_prodname_loc = ('xpath', '//div[@class="orderList"][1]/div[2]/div/div[1]/ul/li/div/div[1]/div[2]/div[1]')
+        __search_box_loc = ('xpath', '//div[@class="top"]/span[5]/div/input')
+        # 提取列表第一个商品名称
+        prod_name1 = self.get_text_loc(__extract_prodname_loc)
+        # 通过商品名称搜索
+        self.send_keys_loc(__search_box_loc, text=prod_name1)
+        self.enter_key(__search_box_loc)
+        sleep(3)
+        # 提取列表第一个商品名称
+        prod_name2 = self.get_text_loc(__extract_prodname_loc)
+        return prod_name1, prod_name2
+
+    # 订单中心-点击退货/售后-申请记录列表搜索
+    def application_record_list(self):
+        __application_record_loc = ('xpath', '//div[@class="top"]/span[2]')
+        __extract_prodname_loc = (
+        'xpath', '//div[@class="orderList"][1]/div[2]/div/div[1]/ul/li/div/div[1]/div[2]/div[1]')
+        __search_box_loc = ('xpath', '//div[@class="top"]/span[5]/div/input')
+        # 点击申请记录列表
+        self.click_loc(__application_record_loc)
+        sleep(2)
+        # 提取列表第一个商品名称
+        prod_name1 = self.get_text_loc(__extract_prodname_loc)
+        # 通过商品名称搜索
+        self.send_keys_loc(__search_box_loc, text=prod_name1)
+        self.enter_key(__search_box_loc)
+        sleep(3)
+        # 提取列表第一个商品名称
+        prod_name2 = self.get_text_loc(__extract_prodname_loc)
+        return prod_name1, prod_name2
+
+    # 订单中心-点击退货/售后-处理中列表搜索
+    def being_processed_list(self):
+        __being_processed_loc = ('xpath', '//div[@class="top"]/span[3]')
+        __extract_prodname_loc = (
+        'xpath', '//div[@class="orderList"][1]/div[2]/div/div[1]/ul/li/div/div[1]/div[2]/div[1]')
+        __search_box_loc = ('xpath', '//div[@class="top"]/span[5]/div/input')
+        # 点击处理中列表
+        self.click_loc(__being_processed_loc)
+        sleep(2)
+        # 提取列表第一个商品名称
+        prod_name1 = self.get_text_loc(__extract_prodname_loc)
+        # 通过商品名称搜索
+        self.send_keys_loc(__search_box_loc, text=prod_name1)
+        self.enter_key(__search_box_loc)
+        sleep(3)
+        # 提取列表第一个商品名称
+        prod_name2 = self.get_text_loc(__extract_prodname_loc)
+        return prod_name1, prod_name2
+
+    # 订单中心-点击退货/售后-召回商品列表搜索
+    def recall_of_goods_list(self):
+        __recall_of_goods_loc = ('xpath', '//div[@class="top"]/span[4]')
+        __extract_prodname_loc = (
+            'xpath', '//div[@class="orderList"][1]/div[2]/div/div[1]/ul/li/div/div[1]/div[2]/div[1]')
+        __search_box_loc = ('xpath', '//div[@class="top"]/span[5]/div/input')
+        # 点击召回商品记录列表
+        self.click_loc(__recall_of_goods_loc)
+        sleep(2)
+        # 提取列表第一个商品名称
+        prod_name1 = self.get_text_loc(__extract_prodname_loc)
+        # 通过商品名称搜索
+        self.send_keys_loc(__search_box_loc, text=prod_name1)
+        self.enter_key(__search_box_loc)
+        sleep(3)
+        # 提取列表第一个商品名称
+        prod_name2 = self.get_text_loc(__extract_prodname_loc)
+        return prod_name1, prod_name2
+
+    __discount_coupon = ('xpath', '//*[@id="sideBar"]/ul/li[3]/ul/li[1]/span')
+    __discount_coupon_text = ('xpath', '//div[@class="coupon-right-top-left"]')
+
+    # 会员中心-我的优惠券跳转
+    def my_discount_coupon(self):
+        self.click_loc(self.__discount_coupon)
+        sleep(2)
+        text = self.get_text_loc(self.__discount_coupon_text)
+        return text
 
     # 我的关注
     __wdgz_loc = ('xpath', '//*[@id="sideBar"]/ul/li[2]/ul/li[1]/span')
