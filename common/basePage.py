@@ -464,7 +464,6 @@ class Action(object):
     def switch_window(self, num=-1):
         """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
         handles = self.driver.window_handles
-        print(handles)
         self.driver.switch_to.window(handles[num])
 
     def wait_and_switch_window(self, num=-1, timeout=20):

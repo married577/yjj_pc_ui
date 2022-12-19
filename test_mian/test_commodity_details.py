@@ -178,7 +178,7 @@ class TestLogin():
 
     sleep(1)
 
-    # 点击店铺客服跳转正确校验
+    # 点击店铺客服跳转正确校验点
     def test_customer_servise(self):
         # 点击店铺客服
         self.detailsPage.check_page_after_click_customer_servise()

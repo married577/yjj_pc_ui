@@ -11,6 +11,7 @@ import pytest
 username = "武汉市新洲区好药师周铺大药房"
 password = "123456"
 search_keyword = "测试"
+product_name = "自动化专用勿动1"
 
 
 class TestLogin():
@@ -50,7 +51,8 @@ class TestLogin():
         result3 = self.home.shopping_trolley()
         assume(result3 == '购物车', "预期结果为：购物车，实际结果为：%s" % result3)
         '''从购物车退回到首页'''
-        self.driver.back()
+        sleep(3)
+        self.home.close_and_switch_window()
 
     sleep(2)
 
@@ -59,7 +61,7 @@ class TestLogin():
         '''获取全部商品分类，第一个分类名称'''
         result4 = self.home.goods_category_text()
         '''获取全部商品分类，跳转第一个分类后，获取分类页面的分类名称'''
-        sleep(1)
+        sleep(3)
         result5 = self.home.goods_category()
         assume(result5 == result4, "预期结果为：{0}，实际结果为：{1}".format(result4, result5))
         '''关闭当前页面，切换到最后面一个窗口'''
@@ -70,7 +72,8 @@ class TestLogin():
         result6 = self.home.right_shopping_trolley()
         assume(result6 == '购物车', "预期结果为：购物车，实际结果为：%s" % result6)
         '''从购物车退回到首页'''
-        self.driver.back()
+        sleep(3)
+        self.home.close_and_switch_window()
 
     sleep(1)
 
@@ -79,17 +82,19 @@ class TestLogin():
         result7 = self.home.right_opinion()
         assume(result7 == '提建议', "预期结果为：提建议，实际结果为：%s" % result7)
         '''从反馈建议页面退回到首页'''
-        self.driver.back()
+        sleep(3)
+        self.home.close_and_switch_window()
 
     sleep(1)
+    """
+    # 平台客服弹框定位不到，暂时跳过，再找解决方法
+    # 右侧平台客服跳转校验
+    def test_right_call_center(self):
+        result8 = self.home.right_call_center()
+        assume(result8 == '小九在线客服', "预期结果为：小九在线客服，实际结果为：%s" % result8)
 
-    # # 平台客服弹框定位不到，暂时跳过，再找解决方法
-    # # 右侧平台客服跳转校验
-    # def test_right_call_center(self):
-    #     result8 = self.home.right_call_center()
-    #     assume(result8 == '小九在线客服', "预期结果为：小九在线客服，实际结果为：%s" % result8)
-
-    # 右侧领劵中心跳转校验
+    """
+    # 顶部领劵中心跳转校验
     def test_right__coupon_center(self):
         result9 = self.home.right__coupon_center()
         assume(result9 == '领券中心', "预期结果为：领劵中心，实际结果为：%s" % result9)
@@ -164,9 +169,10 @@ class TestLogin():
     # 顶部搜索输入框搜索跳转校验
     def test_search_goods(self):
         result17 = self.home.search_goods(keywords=search_keyword)
-        assume(result17 == search_keyword, "预期结果为：{0}，实际结果为：{1}".format(search_keyword, result17))
+        assume(search_keyword in result17, "预期结果为：{0}，实际结果为：{1}".format(search_keyword, result17))
         '''关闭当前页面，切换到最后面一个窗口'''
         self.basepage.close_and_switch_window()
+
 
 
 

@@ -20,6 +20,7 @@ password = "123456"
 search_keyword = "测试"
 # 支付商品编码
 product_code = "100118860"
+product_name = "自动化专用勿动1"
 
 # 跑的时候第一个商品不要设置成营销活动
 
@@ -65,11 +66,21 @@ class TestLogin():
         sleep(3)
 
     sleep(1)
-
+    """
+    # 会员中心领劵按钮功能有变动，目前没有领劵按钮
     # 点击领劵校验
     def test_click_coupon_button(self):
         result = self.membercenter.click_coupon_button()
         assume(result == "领券中心", "预期结果为：领券中心，实际结果为：{0}".format(result))
+        self.driver.back()
+        sleep(2)
+    """
+    sleep(1)
+
+    # 点击钱包充值校验
+    def test_click_wallet_recharge(self):
+        result = self.membercenter.click_wallet_recharge()
+        assume(result == "钱包充值", "预期结果为：钱包充值，实际结果为：{0}".format(result))
         self.driver.back()
         sleep(2)
 
@@ -135,14 +146,14 @@ class TestLogin():
         result1, result2 = self.membercenter.recall_of_goods_list()
         assume(result1 == result2, "预期结果为：{1}，实际结果为：{0}".format(result1, result2))
 
-    '''
+    """
     # 我的缺货篮定位不到，暂时注释
     # 关注中心-点击我的缺货篮校验
     def test_click_wdqhl(self):
         result = self.membercenter.click_wdqhl()
         assume(result == "我的缺货篮", "预期结果为：我的缺货篮，实际结果为：{0}".format(result))
         sleep(2)
-    '''
+    """
     sleep(1)
 
     # 会员中心-我的优惠券跳转校验
@@ -150,3 +161,195 @@ class TestLogin():
         result = self.membercenter.my_discount_coupon()
         assume(result == "我的优惠券", "预期结果为：我的优惠券，实际结果为：{0}".format(result))
         sleep(2)
+
+    sleep(1)
+
+    # 会员中心-我的优惠券-领劵中心跳转校验
+    def test_go_coupon_center(self):
+        result1, result2 = self.membercenter.go_coupon_center()
+        assume(result1 == "领券中心", "预期结果为：领券中心，实际结果为：{0}".format(result1))
+        assume(result2 == "我的优惠券", "预期结果为：我的优惠券，实际结果为：{0}".format(result2))
+        sleep(3)
+
+    sleep(1)
+
+    # 会员中心-企业信息页面跳转校验
+    def test_enterprise_information(self):
+        result = self.membercenter.enterprise_information()
+        assume(result == "企业信息", "预期结果为：企业信息，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 会员中心-首营记录页面跳转校验
+    def test_shouying_record(self):
+        result = self.membercenter.shouying_record()
+        assume(result == "首营记录", "预期结果为：首营记录，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 会员中心-首营记录页面-列表查询店铺名称校验
+    def test_shouying_recored_select_storename(self):
+        result1, result2 = self.membercenter.shouying_recored_select_storename()
+        assume(result1 == result2, "预期结果为：{1}，实际结果为：{0}".format(result1, result2))
+        sleep(2)
+
+    sleep(1)
+
+    # 会员中心-首页记录页面-列表查询店铺类型校验
+    def test_shouying_recored_select_storetype(self):
+        result1, result2 = self.membercenter.shouying_recored_select_storetype()
+        assume(result1 == result2, "预期结果为：{1}，实际结果为：{0}".format(result1, result2))
+        sleep(2)
+
+    sleep(1)
+
+    # 会员中心-企业管理跳转校验
+    def test_business_management(self):
+        result = self.membercenter.business_management()
+        assume(result == "企业管理", "预期结果为：企业管理，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 会员中心-资质管理跳转校验
+    def test_qualification_management(self):
+        result = self.membercenter.qualification_management()
+        assume(result == "资质管理", "预期结果为：资质管理，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 会员中心-员工账号管理跳转校验
+    def test_employee_account_management(self):
+        result = self.membercenter.employee_account_management()
+        assume(result == "员工账号管理", "预期结果为：员工账号管理，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 会员中心-发票管理跳转校验
+    def test_invoice_management(self):
+        result = self.membercenter.invoice_management()
+        assume(result == "发票查询", "预期结果为：发票查询，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 个人中心-支付查询跳转校验
+    def test_pay_query(self):
+        result = self.membercenter.pay_query()
+        assume(result == "支付查询", "预期结果为：支付查询，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 个人中心-支付查询-支付方式查询校验
+    def test_pay_query_payment(self):
+        result1, result2 = self.membercenter.pay_query_payment()
+        assume(result1 == result2, "预期结果为：{0}，实际结果为：{1}".format(result1, result2))
+        sleep(2)
+
+    sleep(1)
+
+    # 个人中心-我的钱包页面跳转校验
+    def test_my_wallet(self):
+        result = self.membercenter.my_wallet()
+        assume(result == "可用余额", "预期结果为：可用余额，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 个人中心-我的九州币页面跳转校验
+    def test_my_jzb(self):
+        result = self.membercenter.my_jzb()
+        assume(result == "我的九州币", "预期结果为：我的九州币，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 个人中心-账户安全页面跳转校验
+    def test_account_security(self):
+        result = self.membercenter.account_security()
+        assume(result == "账户安全", "预期结果为：账户安全，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 个人中心-抽奖页面跳转校验
+    def test_my_lottery(self):
+        result = self.membercenter.my_lottery()
+        assume(result == "我的抽奖", "预期结果为：我的抽奖，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 个人中心-投诉建议跳转校验
+    def test_complaint_and_advice(self):
+        result = self.membercenter.complaint_and_advice()
+        assume(result == "提建议", "预期结果为：提建议，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 客户服务-帮助中心跳转校验
+    def test_help_center(self):
+        result = self.membercenter.help_center()
+        assume(result == "帮助中心", "预期结果为：帮助中心，实际结果为：{0}".format(result))
+        self.driver.back()
+        sleep(2)
+
+    sleep(1)
+
+    # 客户服务-客商往来账跳转校验
+    def test_merchant_current_account(self):
+        result = self.membercenter.merchant_current_account()
+        assume(result == "客商往来账", "预期结果为：客商往来账，实际结果为：{0}".format(result))
+        sleep(2)
+
+    sleep(1)
+
+    # 会员中心-切换企业校验
+    def test_switch_to_enterprise(self):
+        # 选择切换企业进行切换
+        result1 = self.membercenter.switch_to_enterprise()
+        # 新企业首页-关闭引导和证照补全和过期
+        self.home.home_page_guidance()
+        self.home.home_expired_certificate()
+        self.home.home_complete_the_certificate()
+        sleep(3)
+        # 获取切换企业名称
+        self.home.switch_window()
+        result2 = self.home.get_top_user_name()
+        assume(result1 == result2, "预期结果为：{1}，实际结果为：{0}".format(result1, result2))
+        # 还原-切换到原来的企业
+        sleep(3)
+        self.membercenter.back_enterprise()
+        # 新企业首页-关闭引导和证照补全和过期
+        self.home.home_page_guidance()
+        self.home.home_expired_certificate()
+        self.home.home_complete_the_certificate()
+        # 跳转到会员中心页面
+        result3 = self.home.top_member_center()
+        assume(result3 == "会员中心", "预期结果为：会员中心，实际结果为：{0}".format(result3))
+        sleep(2)
+        # 会员中心如果有引导就操作引导
+        self.membercenter.member_center_guidance()
+        sleep(3)
+
+    sleep(1)
+
+    # 会员中心-搜索校验
+    def test_member_center_search(self):
+        # 会员中心搜索
+        self.membercenter.member_center_search(prod_name=product_name)
+        self.searchpage.switch_window()
+        # 获取搜索页面搜索结果商品名称
+        result = self.searchpage.get_goods_name()
+        assume(product_name in result, "预期结果为：{1}，实际结果为：{0}".format(result, product_name))
+        # 返回到会员中心页面
+        self.searchpage.close_and_switch_window()
+        sleep(3)
+
+    sleep(1)

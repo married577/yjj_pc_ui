@@ -164,7 +164,7 @@ class MemberCenter(BaseMenus):
         text = self.get_text_loc(self.__get_coupon_centre)
         return text
 
-    __details_view_loc = ('xpath', '//div[@class="balance"]/div[@class="mt"]/span[2]')
+    __details_view_loc = ('xpath', '//div[@class="balance"]/div[@class="mt"]/span[text()="查看明细"]')
     __get_details_loc = ('xpath', '//div[@class="count-title"]')
 
     # 点击查看明细
@@ -173,6 +173,19 @@ class MemberCenter(BaseMenus):
         sleep(3)
         text = self.get_text_loc(self.__get_details_loc)
         return text
+
+    __wallet_recharge_loc = ('xpath', '//div[@class="balance"]/div[@class="mt"]/span[text()="充值"]')
+    __get_wallet_recharge_text = ('xpath', '//div[@class="content"]/span[@class="title"]')
+
+    # 点击钱包充值
+    def click_wallet_recharge(self):
+        try:
+            self.click_loc(self.__wallet_recharge_loc)
+            sleep(3)
+            text = self.get_text_loc(self.__get_wallet_recharge_text)
+            return text
+        except TimeoutException:
+            print("没有找到充值按钮")
 
     __repayment_loc = ('xpath', '//div[@class="arrears"]/div[@class="mt"]/span[2]')
     __get_repayment_loc = ('xpath', '//span[@class="title"]')
@@ -269,7 +282,7 @@ class MemberCenter(BaseMenus):
             Log().info(u"未找到历史采购菜单！")
 
     # 缺货篮
-    __wdqhl_loc = ('xpath', '//*[@id="sideBar"]/ul/li[2]/ul/li[2]/span')
+    __wdqhl_loc = ('xpath', '//li[@class="second-li"]/span[text()="我的缺货篮"]')
     __wdqhl_text_loc = ('xpath', '//div[@class="ph-paths"]/span[text()="我的缺货篮"]')
 
     # 关注中心-点击我的缺货篮
@@ -366,14 +379,269 @@ class MemberCenter(BaseMenus):
         prod_name2 = self.get_text_loc(__extract_prodname_loc)
         return prod_name1, prod_name2
 
-    __discount_coupon = ('xpath', '//*[@id="sideBar"]/ul/li[3]/ul/li[1]/span')
+    __discount_coupon = ('xpath', '//li[@class="second-li"]/span[text()="我的优惠券"]')
     __discount_coupon_text = ('xpath', '//div[@class="coupon-right-top-left"]')
 
     # 会员中心-我的优惠券跳转
     def my_discount_coupon(self):
         self.click_loc(self.__discount_coupon)
-        sleep(2)
+        sleep(3)
         text = self.get_text_loc(self.__discount_coupon_text)
+        return text
+
+    __coupon_center_loc = ('xpath', '//div[@class="coupon-right-top-right"]')
+    __coupon_center_text_loc = ('xpath', '//div[@class="ph-custom_content"]/div')
+    __back_my_discount_coupon = ('xpath', '//div[text()="进入我的优惠券列表"]')
+
+    # 会员中心-我的优惠券列表-领劵中心跳转
+    def go_coupon_center(self):
+        # 跳转到领劵中心
+        self.click_loc(self.__coupon_center_loc)
+        sleep(3)
+        # 提取领劵中心文本校验
+        text1 = self.get_text_loc(self.__coupon_center_text_loc)
+        # 返回到我的优惠券列表
+        self.click_loc(self.__back_my_discount_coupon)
+        # 提取我的优惠券列表文本校验
+        text2 = self.get_text_loc(self.__discount_coupon_text)
+        return text1, text2
+
+    __enterprise_information_loc = ('xpath', '//li[@class="second-li"]/span[text()="企业信息"]')
+    __enterprise_information_text_loc = ('xpath', '//div[@class="invoice-header"]/span[1]')
+
+    # 会员中心-企业信息页面跳转
+    def enterprise_information(self):
+        # 点击企业信息模块
+        self.click_loc(self.__enterprise_information_loc)
+        sleep(3)
+        # 提取企业信息文本
+        text = self.get_text_loc(self.__enterprise_information_text_loc)
+        return text
+
+    __shouying_record_loc = ('xpath', '//li[@class="second-li"]/span[text()="首营记录"]')
+    __shouying_record_text_loc = ('xpath', '//div[@class="ph-paths"]/span[1]')
+
+    # 会员中心-首营记录跳转
+    def shouying_record(self):
+        # 点击首营记录
+        self.click_loc(self.__shouying_record_loc)
+        # 获取首营记录页面文本校验
+        text = self.get_text_loc(self.__shouying_record_text_loc)
+        return text
+
+    __shouying_record_storename = ('xpath', '//table[@class="el-table__body"]/tbody/tr[1]/td[3]/div')
+    __shouying_record_input_box = ('xpath', '//div[@class="query-cont"]/div[1]/input')
+    __shouying_record_confirm = ('xpath', '//div[@class="query-cont"]/button[1]')
+
+    # 会员中心-首营记录查询-店铺名称
+    def shouying_recored_select_storename(self):
+        try:
+            store_name1 = self.get_text_loc(self.__shouying_record_storename)
+            self.send_keys_loc(self.__shouying_record_input_box, text=store_name1)
+            self.click_loc(self.__shouying_record_confirm)
+            sleep(3)
+            store_name2 = self.get_text_loc(self.__shouying_record_storename)
+            return store_name1, store_name2
+        except TimeoutException:
+            print("没有提取到店铺名称，请检查店铺列表是否有数据")
+
+    __shouying_record_storetype = ('xpath', '//span[@class="el-input__suffix"]/span/i')
+    __shouying_record_first_storetype = ('xpath', '//div[@x-placement="bottom-start"]/div[1]/div[1]/ul/li[1]/span')
+    __shouying_record_text_storetype = ('xpath', '//table[@class="el-table__body"]/tbody/tr[1]/td[4]/div')
+    __shouying_record_reset = ('xpath', '//div[@class="query-cont"]/button[2]')
+
+    # 会员中心-首营记录查询-店铺类型
+    def shouying_recored_select_storetype(self):
+        try:
+            # 点击重置按钮
+            self.click_loc(self.__shouying_record_reset)
+            sleep(3)
+            # 点击店铺类型下拉框
+            self.click_loc(self.__shouying_record_storetype)
+            # 提取下拉框第一个店铺类型
+            storetype1 = self.get_text_loc(self.__shouying_record_first_storetype)
+            # 点击第一个店铺类型
+            self.click_loc(self.__shouying_record_first_storetype)
+            # 点击查询
+            self.click_loc(self.__shouying_record_confirm)
+            sleep(3)
+            # 提取店铺列表第一个店铺类型
+            storetype2 = self.get_text_loc(self.__shouying_record_text_storetype)
+            return storetype1, storetype2
+        except TimeoutException:
+            print("没有提取到店铺类型，请检查店铺列表是否有数据")
+
+    __business_management_loc = ('xpath', '//li[@class="second-li"]/span[text()="企业管理"]')
+    __business_management_text_loc = ('xpath', '//div[@class="box-title"]/div[1]/span[1]')
+
+    # 会员中心-企业管理页面跳转
+    def business_management(self):
+        # 点击企业管理
+        self.click_loc(self.__business_management_loc)
+        sleep(2)
+        # 获取企业管理页面文本
+        text = self.get_text_loc(self.__business_management_text_loc)
+        return text
+
+    __qualification_management_loc = ('xpath', '//li[@class="second-li"]/span[text()="资质管理"]')
+    __qualification_management_text_loc = ('xpath', '//div[@class="qualification-title"]/span')
+
+    # 会员中心-资质管理页面跳转
+    def qualification_management(self):
+        # 点击资质管理
+        self.click_loc(self.__qualification_management_loc)
+        sleep(2)
+        # 获取资质管理页面文本
+        text = self.get_text_loc(self.__qualification_management_text_loc)
+        return text
+
+    __employee_account_management_loc = ('xpath', '//li[@class="second-li"]/span[text()="员工账号管理"]')
+    __employee_account_management_text_loc = ('xpath', '//div[@class="box-title"]/div[1]/span[1]')
+
+    # 会员中心-员工账号管理页面跳转
+    def employee_account_management(self):
+        # 点击员工账号管理
+        self.click_loc(self.__employee_account_management_loc)
+        sleep(2)
+        # 获取员工账号管理页面文本
+        text = self.get_text_loc(self.__employee_account_management_text_loc)
+        return text
+
+    __invoice_management_loc = ('xpath', '//li[@class="second-li"]/span[text()="发票管理"]')
+    __invoice_management_text_loc = ('xpath', '//div[@class="invoice-header"]/span[1]')
+
+    # 会员中心-发票管理页面跳转
+    def invoice_management(self):
+        # 点击发票管理
+        self.click_loc(self.__invoice_management_loc)
+        sleep(2)
+        # 获取发票管理页面文本
+        text = self.get_text_loc(self.__invoice_management_text_loc)
+        return text
+
+    __pay_query_loc = ('xpath', '//li[@class="second-li"]/span[text()="支付查询"]')
+    __pay_query_text_loc = ('xpath', '//div[@class="ph-paths"]/span[1]')
+
+    # 个人中心-支付查询页面跳转
+    def pay_query(self):
+        self.js_focus_element_loc(self.__pay_query_loc)
+        # 点击支付查询
+        self.click_loc(self.__pay_query_loc)
+        sleep(2)
+        # 获取支付查询页面文本
+        text = self.get_text_loc(self.__pay_query_text_loc)
+        return text
+
+    # 个人中心-支付查询页面-支付方式查询
+    def pay_query_payment(self):
+        __pay_query_payment_loc = ('xpath', '//div[@class="query-cont"]/div[2]/div[1]/span/span/i')
+        __pay_query_payment_text_loc = ('xpath', '//tr[@class="el-table__row"][1]/td[5]/div')
+        __pay_query_payment_affirm = ('xpath', '//div[@class="query-cont"]/button')
+        # 提取列表第一个支付方式
+        text1 = self.get_text_loc(__pay_query_payment_text_loc)
+        __pay_query_payment_select_loc = ('xpath', '//div[@class="el-scrollbar"]/div[1]/ul/li/span[text()="{0}"]'.format(text1))
+        # 选择支付方式下拉框
+        self.click_loc(__pay_query_payment_loc)
+        sleep(2)
+        # 选择支付方式
+        self.click_loc(__pay_query_payment_select_loc)
+        sleep(2)
+        # 点击查询按钮
+        self.click_loc(__pay_query_payment_affirm)
+        sleep(3)
+        # 提取查询结果
+        text2 = self.get_text_loc(__pay_query_payment_text_loc)
+        return text1, text2
+
+    __my_wallet_loc = ('xpath', '//li[@class="second-li"]/span[text()="我的钱包"]')
+    __my_wallet_text_loc = ('xpath', '//div[@class="count-title"]')
+
+    # 个人中心-我的钱包页面跳转
+    def my_wallet(self):
+        self.js_focus_element_loc(self.__my_wallet_loc)
+        # 点击我的钱包
+        self.click_loc(self.__my_wallet_loc)
+        sleep(2)
+        # 获取我的钱包页面文本
+        text = self.get_text_loc(self.__my_wallet_text_loc)
+        return text
+
+    __my_jzb_loc = ('xpath', '//li[@class="second-li"]/span[text()="我的九州币"]')
+    __my_jzb_text_loc = ('xpath', '//div[@class="top-box-left"]/div[@class="title"]')
+
+    # 个人中心-我的九州币页面跳转
+    def my_jzb(self):
+        self.js_focus_element_loc(self.__my_jzb_loc)
+        # 点击我的九州币
+        self.click_loc(self.__my_jzb_loc)
+        sleep(2)
+        # 获取我的九州币页面文本
+        text = self.get_text_loc(self.__my_jzb_text_loc)
+        return text
+
+    __account_security_loc = ('xpath', '//li[@class="second-li"]/span[text()="账户安全"]')
+    __account_security_text_loc = ('xpath', '//span[@class="account-title"]')
+
+    # 个人中心-账户安全页面跳转
+    def account_security(self):
+        self.js_focus_element_loc(self.__account_security_loc)
+        # 点击账户安全
+        self.click_loc(self.__account_security_loc)
+        sleep(2)
+        # 获取账户安全页面文本
+        text = self.get_text_loc(self.__account_security_text_loc)
+        return text
+
+    __my_lottery_loc = ('xpath', '//li[@class="second-li"]/span[text()="抽奖"]')
+    __my_lottery_text_loc = ('xpath', '//span[@class="myCoupon-title"]')
+
+    # 个人中心-抽奖页面跳转
+    def my_lottery(self):
+        self.js_focus_element_loc(self.__my_lottery_loc)
+        # 点击抽奖
+        self.click_loc(self.__my_lottery_loc)
+        sleep(2)
+        # 获取抽奖页面文本
+        text = self.get_text_loc(self.__my_lottery_text_loc)
+        return text
+
+    __complaint_and_advice_loc = ('xpath', '//li[@class="second-li"]/span[text()="投诉建议"]')
+    __complaint_and_advice_text_loc = ('xpath', '//div[@id="tab-first"]')
+
+    # 个人中心-投诉建议跳转
+    def complaint_and_advice(self):
+        self.js_focus_element_loc(self.__complaint_and_advice_loc)
+        # 点击投诉建议
+        self.click_loc(self.__complaint_and_advice_loc)
+        sleep(2)
+        # 获取投诉建议页面文本
+        text = self.get_text_loc(self.__complaint_and_advice_text_loc)
+        return text
+
+    __help_center_loc = ('xpath', '//li[@class="second-li"]/span[text()="帮助中心"]')
+    __help_center_text_loc = ('xpath', '//div[@class="ph-content"]/span')
+
+    # 客户服务-帮助中心跳转
+    def help_center(self):
+        self.js_focus_element_loc(self.__help_center_loc)
+        # 点击帮助中心
+        self.click_loc(self.__help_center_loc)
+        sleep(2)
+        # 获取帮助中心页面文本
+        text = self.get_text_loc(self.__help_center_text_loc)
+        return text
+
+    __merchant_current_account_loc = ('xpath', '//li[@class="second-li"]/span[text()="客商往来账"]')
+    __merchant_current_account_text_loc = ('xpath', '//div[@class="ph-paths"]/span[1]')
+
+    # 客户服务-客商往来账跳转
+    def merchant_current_account(self):
+        self.js_focus_element_loc(self.__merchant_current_account_loc)
+        # 点击客商往来账
+        self.click_loc(self.__merchant_current_account_loc)
+        sleep(2)
+        # 获取客商往来账页面文本
+        text = self.get_text_loc(self.__merchant_current_account_text_loc)
         return text
 
     # 我的关注
@@ -447,8 +715,6 @@ class MemberCenter(BaseMenus):
             self.click_loc(self.__wdyhq_loc)
         except TimeoutException:
             Log().info(u"未找到我的优惠券菜单！")
-
-    # 企业信息
 
     # 首营纪录
 
@@ -549,6 +815,42 @@ class MemberCenter(BaseMenus):
         except:
             Log().info(u'未找到客商往来帐查询')
 
+    __switch_to_button = ('xpath', '//div[@class="userinfo"]/i')
+    __get_enterprise_text = ('xpath', '//div[@class="company-ul yjj-scroll"]/div[2]/span')
+    __click_switch_to = ('xpath', '//div[@class="company-ul yjj-scroll"]/div[2]/button/span')
+
+    # 切换企业校验
+    def switch_to_enterprise(self):
+        # 鼠标移动到单位切换处
+        self.move_to_element(self.__switch_to_button)
+        sleep(3)
+        # 提取切换的单位名称
+        name = self.get_text_loc(self.__get_enterprise_text)
+        # 点击所选单位切换按钮
+        self.click_loc(self.__click_switch_to)
+        sleep(3)
+        return name
+
+    __click_back_switch_to = ('xpath', '//div[@class="company-ul yjj-scroll"]/div[1]/button/span')
+
+    # 切回原来的企业
+    def back_enterprise(self):
+        # 鼠标移动到单位切换处
+        self.move_to_element(self.__switch_to_button)
+        sleep(3)
+        # 点击所选单位切换按钮
+        self.click_loc(self.__click_back_switch_to)
+        sleep(3)
+
+    __member_center_search = ('xpath', '//input[@class="el-input__inner"]')
+
+    # 会员中心-搜索页面搜索校验
+    def member_center_search(self, prod_name):
+        # 输入搜索关键字
+        self.send_keys_loc(self.__member_center_search, text=prod_name)
+        # 回车
+        self.enter_key(self.__member_center_search)
+        sleep(3)
 
     # =============================个人中心-我的订单元素集合=======================================================
     # 订单同步1.0-开票单号FDG开头（一组元素6个）

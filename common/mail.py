@@ -101,6 +101,7 @@ def send_mail(user_list, sub, content):
     server.sendmail(user, user_list, message.as_string())
     server.close()
 
+
 if __name__ == '__main__':
     user_list = ['wumeng@jztey.com', 'huyaokang@ehaoyao.com']
     # huyaokang@ehaoyao.com,254410655@qq.com,ruanbowei@ehaoyao.com

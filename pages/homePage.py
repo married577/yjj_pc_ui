@@ -68,10 +68,21 @@ class HomePage(BaseMenus):
 
     __expired_certificate_loc = ('xpath', '//div[@class="el-dialog__footer"]/span/button[1]/span')
 
-    # 首页证照过期
+    # 首页证照过期提示
     def home_expired_certificate(self):
         try:
             self.click_loc(self.__expired_certificate_loc)
+        except:
+            pass
+
+    __complete_the_certificate = ('xpath', '//*[@id="__layout"]/div/div/div[2]/div/div/div[3]/span/button')
+
+    # 首页关闭证照补全提示
+    def home_complete_the_certificate(self):
+        try:
+            self.click_loc(self.__complete_the_certificate)
+            # element = self.find_element(self.__complete_the_certificate)
+            # self.driver.execute_script("$(arguments[0]).click()", element)
         except:
             pass
 
@@ -84,11 +95,11 @@ class HomePage(BaseMenus):
 
     # 消息中心跳转
     __message_center_data1 = ('xpath',
-                              '//*[@id="__layout"]/div/div/div[2]//div[@class="ph-icon_menus"]/div/div[1]/div/div[1]//div[@class="ph-menu"]/span[1]')
+                              '//*[@id="__layout"]/div/div/div/div[2]/div/div/div[3]/div/div[1]/div/div[1]/span/span/div/div/span[1]')
     __message_center_data2 = (
         'xpath', '//*[@id="__layout"]//div[@class="el-dialog__body"]//div[@class="ml-left"]/div/div')
     __message_center_data3 = (
-        'xpath', '//*[@id="__layout"]/div/div/div[2]/div/div/div[3]/div/div[1]/div/div[2]/div/div[1]/button/i')
+        'xpath', '//*[@id="__layout"]/div/div/div/div[2]/div/div/div[3]/div/div[1]/div/div[2]/div/div[1]/button')
 
     def message_center(self):
         '''点击消息中心'''
@@ -108,6 +119,8 @@ class HomePage(BaseMenus):
     def shopping_trolley(self):
         '''点击购物车'''
         self.click_loc(self.__shopping_data1)
+        # 切换到购物车页面
+        self.switch_window()
         text = self.get_text_loc(self.__shopping_data2)
         return text
 
@@ -119,6 +132,7 @@ class HomePage(BaseMenus):
     def right_shopping_trolley(self):
         '''点击购物车'''
         self.click_loc(self.__right_shopping_data1)
+        self.switch_window()
         text = self.get_text_loc(self.__right_shopping_data2)
         return text
 
@@ -130,6 +144,7 @@ class HomePage(BaseMenus):
     def right_opinion(self):
         '''点击反馈建议'''
         self.click_loc(self.__right_opinion_data1)
+        self.switch_window()
         text = self.get_text_loc(self.__right_opinion_data2)
         return text
 
@@ -138,12 +153,12 @@ class HomePage(BaseMenus):
                             '//div[@class="suggest"]/div/i[@class="icon-service"]')
     __right_call_center2 = ('xpath', '//div[@class="status-bar"]/span[2]')
     __right_call_center3 = ('xpath', '//div[@id="em-kefu-webim-chat"]//i[@title="关闭"]')
-    __frame_data = ('xpath', '//*[@id="cross-origin-iframe"]')
+    __frame_data = ('xpath', '//*[@id="easemob-iframe-dec301d0-802d-4c49-afe2-b11234d845da"]')
 
     def right_call_center(self):
         '''点击平台客服'''
         self.click_loc(self.__right_call_center1)
-        sleep(2)
+        sleep(3)
         # self.js_focus_element_loc(self.__frame_data)
         self.switch_frame(self.__frame_data)
         '''提取客服对话框断言字段'''
@@ -152,13 +167,13 @@ class HomePage(BaseMenus):
         self.click_loc(self.__right_call_center3)
         return text
 
-    # 右侧领劵中心跳转
+    # 顶部领劵中心跳转
     __right_coupon_center1 = ('xpath',
-                              '//div[@class="fastEntrance"][1]/div[1]')
+                              '//span[contains(text(), "领券中心")]')
     __right_coupon_center2 = ('xpath', '//div[@class="ph-custom_content"]/div')
 
     def right__coupon_center(self):
-        '''点击右侧领劵中心按钮'''
+        '''点击顶部领劵中心按钮'''
         self.click_loc(self.__right_coupon_center1)
         """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
         self.switch_window()
@@ -167,7 +182,7 @@ class HomePage(BaseMenus):
 
     # 右侧常购清单跳转
     __right_often_buy1 = ('xpath',
-                          '//div[@class="fastEntrance"][1]/div[2]')
+                          '//div[@class="fastEntrance"]//span[text()="常购清单"]')
     __right_often_buy2 = ('xpath', '//div[@class="ss-breadcrumbs"]/span')
 
     def right__often_buy(self):
@@ -178,9 +193,9 @@ class HomePage(BaseMenus):
         text = self.get_text_loc(self.__right_often_buy2)
         return text
 
-    # 右侧帮忙中心跳转
+    # 右侧帮助中心跳转
     __right_help_center1 = ('xpath',
-                            '//div[@class="fastEntrance"][2]/div[1]')
+                            '//div[@class="fastEntrance"]//span[text()="帮助中心"]')
     __right_help_center2 = ('xpath', '//div[@class="ph-content"]/span')
 
     def right__help_center(self):
@@ -193,7 +208,7 @@ class HomePage(BaseMenus):
 
     # 右侧去还款跳转
     __right_repayment1 = ('xpath',
-                          '//div[@class="fastEntrance"][2]/div[2]')
+                          '//div[@class="fastEntrance"]//span[text()="去还款"]')
     __right_repayment2 = ('xpath', '//span[@class="title"]')
 
     def right__repayment(self):
@@ -206,8 +221,8 @@ class HomePage(BaseMenus):
 
     # 右侧发票管理跳转
     __right_invoice_management1 = ('xpath',
-                                   '//div[@class="fastEntrance"][2]/div[3]')
-    __right_invoice_management2 = ('xpath', '//div[@class="invoice-header"]/span')
+                                   '//div[@class="fastEntrance"]//span[text()="发票管理"]')
+    __right_invoice_management2 = ('xpath', '//div[@class="ph-paths"]/span[1]')
 
     def right__invoice_management(self):
         '''点击右侧发票管理按钮'''
@@ -280,6 +295,11 @@ class HomePage(BaseMenus):
     # 顶部用户名称
     __top_user_name_loc = ('xpath', '//*[@class="userinfo"]/span')
 
+    # 获取顶部用户名称
+    def get_top_user_name(self):
+        text = self.get_text_loc(self.__top_user_name_loc)
+        return text
+
     def move_to_username(self):
         # 鼠标悬浮在顶部用户名
         self.move_to_element(self.__top_u_username_loc)
@@ -333,9 +353,9 @@ class HomePage(BaseMenus):
     # 搜索框
     __search_text_loc = ('xpath', '//div[@class="yjj_page_header"]//div[@class="ph-si-el_input el-input"]/input')
     # 搜索按钮
-    __search_button_loc = ('xpath', '//span[contains(text(),"所有商品")]')
+    __search_button_loc = ('xpath', '//*[@id="__layout"]/div/div/div/div[2]/div/div/div[2]/div[1]/div/button')
     # 搜索结果页面文本获取
-    __search_result_loc = ('xpath', '//div[@class="ss-breadcrumbs"]/span[2]')
+    __search_result_loc = ('xpath', '//div[@class="page search"]/div/div[2]/div/div[1]/div[1]/div/div[3]/span')
     # 搜索历史模块
     __search_history_loc = ('xpath', '//*[@id="searchHis"]')
     # 搜索历史模块中的搜索历史列表
@@ -356,7 +376,8 @@ class HomePage(BaseMenus):
         sleep(2)
         self.move_to_element(self.__search_text_loc)
         self.send_keys_loc(self.__search_text_loc, keywords)
-        self.click_loc(self.__search_button_loc)
+        # self.click_loc(self.__search_button_loc)
+        self.enter_key(self.__search_text_loc)
         # self.enter_key(self.__search_text_loc)
         """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
         sleep(1)
