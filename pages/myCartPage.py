@@ -358,7 +358,7 @@ class MyCart(BaseMenus):
     # 删除指定商品
     def remove_item(self, prod_name):
         __item_loc = ('xpath', '//*[text()="%s"]/../../..//*[text()="删除"]' % prod_name)
-        __confirm_remove_loc = ('xpath', '//*[@id="commodity-details"]/div[1]//div[4]/div/div/div[3]/span/button[2]/span[text()="确 定"]')
+        __confirm_remove_loc = ('xpath', '//*[@id="commodity-details"]/div[1]/div[2]/div[4]/div/div/div[3]/span/button[2]/span')
         __hint_remove_loc = ('xpath', '/html/body/div[@role="alert"]/p')
         # 滑动到元素位置
         self.js_focus_element_loc(__item_loc)

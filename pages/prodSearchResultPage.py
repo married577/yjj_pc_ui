@@ -87,7 +87,7 @@ class SearchResult(BaseMenus):
             print(u"无商品，请先配置！")
 
     __detail_goods_name_loc = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
-    __detail_goods_name_loc2 = ('xpath', '//div[@class="gd-full_screen"]/div/div[2]/div[2]/h3/span[2]')
+    __detail_goods_name_loc2 = ('xpath', '//span[contains(text(),"商品名称")]/following-sibling::*/div')
 
     # 获取商品列表第一个商品，点击商品名称进入商品详情里面的商品名称
     def get_detail_goods_name(self):
@@ -104,7 +104,7 @@ class SearchResult(BaseMenus):
             print(u"无商品，请先配置！")
 
     __detail_goods_picture_loc = ('xpath', '//div[@class="page search"]/div/div[2]/div/div[1]/div[1]/div/div[1]/div/div')
-    __detail_goods_picture_loc2 = ('xpath', '//div[@class="gd-full_screen"]/div/div[2]/div[2]/h3/span[2]')
+    __detail_goods_picture_loc2 = ('xpath', '//span[contains(text(),"商品名称")]/following-sibling::*/div')
 
     # 获取商品列表第一个商品，点击商品图片进入商品详情里面的商品名称
     def get_detail_goods_picture(self):
@@ -120,7 +120,7 @@ class SearchResult(BaseMenus):
         except TimeoutException:
             print(u"无商品，请先配置！")
 
-    # 搜索
+    # 输入框搜索
     def search_goods(self, keywords=''):
         sleep(1)
         self.send_keys_loc(self.__search_text_loc, keywords)
@@ -249,7 +249,7 @@ class SearchResult(BaseMenus):
 
     __condition_jiaotc_loc1 = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[3]/label[4]/span[2]')
     __condition_jiaotc_loc2 = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
-    __condition_jiaotc_loc3 = ('xpath', '//div[@class="gd-full_screen"]/div/div[2]/div[2]/div[2]/div[6]/div[2]/span[2]')
+    __condition_jiaotc_loc3 = ('xpath', '//span[text()="处方分类"]/following-sibling::*/span')
 
     # 综合条件-甲类OTC
     def composition_condition_jiaotc(self):
@@ -265,6 +265,7 @@ class SearchResult(BaseMenus):
             self.switch_window()
             sleep(2)
             # 获取商品详情，处方分类类型
+            self.js_focus_element_loc(self.__condition_jiaotc_loc3)
             text2 = self.get_text_loc(self.__condition_jiaotc_loc3)
             # 关闭当前窗口回到最后一个窗口页
             self.close_and_switch_window()
@@ -277,7 +278,7 @@ class SearchResult(BaseMenus):
 
     __condition_yiotc_loc1 = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[3]/label[5]/span[2]')
     __condition_yiotc_loc2 = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
-    __condition_yiotc_loc3 = ('xpath', '//*[@id="__layout"]/div/div/div[5]/div/div[2]/div[2]/div/div[6]/div[2]/span[2]')
+    __condition_yiotc_loc3 = ('xpath', '//span[text()="处方分类"]/following-sibling::*/span')
 
     # 综合条件-乙类OTC
     def composition_condition_yiotc(self):
@@ -293,6 +294,7 @@ class SearchResult(BaseMenus):
             self.switch_window()
             sleep(2)
             # 获取商品详情，处方分类类型
+            self.js_focus_element_loc(self.__condition_yiotc_loc3)
             text2 = self.get_text_loc(self.__condition_yiotc_loc3)
             # 关闭当前窗口回到最后一个窗口页
             self.close_and_switch_window()
@@ -305,7 +307,7 @@ class SearchResult(BaseMenus):
 
     __condition_ethicals_loc1 = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[3]/label[6]/span[2]')
     __condition_ethicals_loc2 = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
-    __condition_ethicals_loc3 = ('xpath', '//*[@id="__layout"]/div/div/div[5]/div/div[2]/div[2]/div/div[5]/div[2]/span[2]')
+    __condition_ethicals_loc3 = ('xpath', '//span[text()="处方分类"]/following-sibling::*/span')
 
     # 综合条件-处方药
     def composition_condition_ethicals(self):
@@ -321,6 +323,7 @@ class SearchResult(BaseMenus):
             self.switch_window()
             sleep(2)
             # 获取商品详情，处方分类类型
+            self.js_focus_element_loc(self.__condition_ethicals_loc3)
             text2 = self.get_text_loc(self.__condition_ethicals_loc3)
             # 关闭当前窗口回到最后一个窗口页
             self.close_and_switch_window()
@@ -333,7 +336,7 @@ class SearchResult(BaseMenus):
 
     __condition_instrument_loc1 = ('xpath', '//div[@class="page search"]/div/div[1]/div/div[3]/div[3]/label[7]/span[2]')
     __condition_instrument_loc2 = ('xpath', '//div[@class="sr-list-item"][1]//div/div[3]/span')
-    __condition_instrument_loc3 = ('xpath', '//*[@id="__layout"]/div/div/div[5]/div/div[2]/div[2]/div/div[5]/div[2]/span[2]')
+    __condition_instrument_loc3 = ('xpath', '//span[text()="处方分类"]/following-sibling::*/span')
 
     # 综合条件-器械
     def composition_condition_instrument(self):
@@ -349,6 +352,7 @@ class SearchResult(BaseMenus):
             self.switch_window()
             sleep(2)
             # 获取商品详情，器械类型
+            self.js_focus_element_loc(self.__condition_instrument_loc3)
             text2 = self.get_text_loc(self.__condition_instrument_loc3)
             # 关闭当前窗口回到最后一个窗口页
             self.close_and_switch_window()
@@ -359,7 +363,7 @@ class SearchResult(BaseMenus):
         except TimeoutException:
             print(u"定位不到处方药，请修改定位元素")
 
-    __search_page_return_loc1 = ('xpath', '//div[@class="yjj_page_header"]//div[@class="ph-logo"]/div/img')
+    __search_page_return_loc1 = ('xpath', '//div[@class="ph-logo"]/div[@class="ph-yjj_logo"]/div[@class="ph-yl-body"]/img')
     __search_page_return_loc2 = ('xpath', '//div[@class="textAlignCenter"]/span')
 
     # 搜索页面点击药九九logo返回到首页
@@ -392,6 +396,8 @@ class SearchResult(BaseMenus):
     # 商品搜索页面跳转到购物车
     def shopping_cart_skip(self):
         self.click_loc(self.__shopping_cart_skip_loc)
+        sleep(3)
+        self.switch_window()
         sleep(3)
 
     # ==============================================搜索过滤区域=======================================================

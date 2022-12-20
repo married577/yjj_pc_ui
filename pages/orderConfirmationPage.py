@@ -67,7 +67,7 @@ class OrderConfirmation(BaseMenus):
         text = self.get_text_loc(self.__extract_title_loc)
         return text
 
-    __order_number_loc = ('xpath', '//div[@class="content"]/div/div[2]/div[4]/span[2]/i')
+    __order_number_loc = ('xpath', '//span[contains(text(),"订单编号")]/following-sibling::*/i')
 
     # 提取订单编号
     def get_order_number(self):

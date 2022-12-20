@@ -206,25 +206,20 @@ class TestLogin():
         assume(result == username, "预期结果为：{1}，实际结果为：{0}".format(result, username))
 
     sleep(1)
-    '''
+
     # 商品详情输入框点击搜索跳转和搜索正确校验
     def test_detail_input_box(self):
         # 获取商品详情里面的，商品名称
         result1 = self.detailsPage.get_prodname()
         # 商品详情输入框输入
         self.detailsPage.search_goods(keywords=result1)
-        # 切换到最新窗口
-        self.basepage.wait_and_switch_window()
         sleep(3)
         # 获取搜索页面，搜索结果商品名称
         result2 = self.searchpage.get_goods_name()
         # 关闭当前页面，切换到最后面一个窗口,回到商品详情页面
         self.basepage.close_and_switch_window()
-        sleep(30)
-        print(result1)
-        print(result2)
         assume(result1 in result2, "预期结果为：{0}，实际结果为：{1}".format(result1, result2))
-    '''
+
     # 商品详情加购校验
     def test_add_to_cart(self):
         # 获取商品名称
@@ -243,4 +238,5 @@ class TestLogin():
         # 关闭当前页面，切换到最后面一个窗口,回到商品详情页面
         self.detailsPage.close_and_switch_window()
         sleep(2)
+
 

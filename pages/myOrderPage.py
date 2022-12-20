@@ -66,6 +66,7 @@ class MyOrder(BaseMenus):
         __relation_and_me_loc = ('xpath', '//div[contains(text(),"%s")]/../../../div/div[1]/div[3]/span' % text)
         __service_name_loc = ('xpath', '//span[@class="em-widget-header-nickname"]')
         self.click_loc(__relation_and_me_loc)
+        sleep(3)
         self.switch_window()
         sleep(5)
         result = self.get_text_loc(__service_name_loc)

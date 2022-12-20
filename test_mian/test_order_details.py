@@ -101,7 +101,7 @@ class TestLogin():
         sleep(3)
 
     sleep(2)
-    '''
+
     # 订单详情-点击再次购买校验
     def test_buy_again(self):
         # 提取商品名称
@@ -115,7 +115,7 @@ class TestLogin():
         assume(result1 in result2, "预期结果为：{0}，实际结果为：{1}".format(result1, result2))
         # 返回到商品详情页面
         self.driver.back()
-    '''
+
     sleep(1)
 
     # 订单详情-点击取消订单校验

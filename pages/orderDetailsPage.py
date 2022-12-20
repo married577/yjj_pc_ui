@@ -156,6 +156,7 @@ class OrderDetails(Action):
     def click_contact_merchant(self):
         self.js_focus_element_loc(self.__contact_merchant_loc)
         self.click_loc(self.__contact_merchant_loc)
+        sleep(3)
         self.switch_window()
         sleep(3)
         text = self.get_text_loc(self.__service_name_loc)

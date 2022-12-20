@@ -39,7 +39,10 @@ class TestLogin():
         # homepage = self.loginpage.login_homepage(username, password)
         # 通过cookies注入登录
         self.loginpage.login_homepage_by_cookies()
+        # 首页引导
         self.home.home_page_guidance()
+        # 证照过期提示
+        self.home.home_expired_certificate()
         result1 = self.home.get_top_username()  # 获取首页登录店铺名称
         assume(result1 == username, "预期结果为：{1}，实际结果为：{0}".format(result1, username))
         # 跳转到搜索页面
@@ -184,7 +187,7 @@ class TestLogin():
         goods_name2 = self.mycar.all_goods_names()
         assume(goods_name1 in goods_name2, "预期结果为：{0}，实际结果为：{1}".format(goods_name1, goods_name2))
         # 返回到搜索页面
-        self.driver.back()
+        self.mycar.close_and_switch_window()
         # 等待加载
         sleep(2)
 
@@ -210,8 +213,8 @@ class TestLogin():
         # 获取商品列表前两个商品的商品价格
         result1, result2 = self.searchpage.get_the_price()
         assume(result1 >= result2, "预期结果为：{0}>={1}，实际结果为：{0}>={1}".format(result1, result2))
-        # 点击搜索按钮，刷新页面清空综合条件
-        self.searchpage.search_goods()
+        # 刷新页面，清空综合条件搜索
+        self.searchpage.refresh()
         sleep(2)
 
     # 综合条件-价格范围校验
@@ -225,11 +228,11 @@ class TestLogin():
         assume(20.00 >= result3 >= 10.00, "预期结果为：20 >= {0}>= 10，实际结果为：20 >= {0} >= 10".format(result3))
         assume(20.00 >= result4 >= 10.00, "预期结果为：20 >= {0}>= 10，实际结果为：20 >= {0} >= 10".format(result4))
         # 点击搜索按钮，刷新页面清空综合条件
-        self.searchpage.search_goods()
+        self.searchpage.refresh()
         sleep(2)
 
     sleep(1)
-
+    
     # 综合条件-甲类OTC搜索结果校验
     def test_composition_condition_jiaotc(self):
         # 获取甲类OTC筛选类型文本和商品详情里面处方分类类型文本
@@ -259,5 +262,3 @@ class TestLogin():
         # 获取器械筛选类型文本和商品详情里面器械类型文本
         result1, result2 = self.searchpage.composition_condition_instrument()
         assume(result1 in result2, "预期结果为：{1}属于{0}，实际结果为：{1}属于{0}".format(result2, result1))
-
-

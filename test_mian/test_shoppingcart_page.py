@@ -19,7 +19,7 @@ username = "武汉市新洲区好药师周铺大药房"
 password = "123456"
 search_keyword = "测试"
 # 售罄商品编码
-product_code = "100127127"
+product_code = "100154268"
 
 # 跑的时候第一个商品不要设置成营销活动
 
@@ -70,10 +70,8 @@ class TestLogin():
         # 售罄商品加购,获取加购提示消息
         result = self.searchpage.first_goods_purchased()
         assume(result == "到货通知登记成功，商品到货后第一时间通知您。", "预期结果为：到货通知登记成功，商品到货后第一时间通知您。，实际结果为：{0}".format(result))
-        # 关闭搜索页面
-        self.searchpage.close_and_switch_window()
-        # 重新进入搜索页面
-        self.home.search_jump()
+        # 刷新搜索页面
+        self.searchpage.refresh()
         sleep(2)
 
     sleep(1)
@@ -238,4 +236,3 @@ class TestLogin():
         # 关闭当前页返回到商品列表页面
         self.detailsPage.close_and_switch_window()
         sleep(2)
-

@@ -21,8 +21,6 @@ search_keyword = "测试"
 # 支付商品编码
 product_code = "100118860"
 
-# 跑的时候第一个商品不要设置成营销活动
-
 
 class TestLogin():
 
@@ -114,13 +112,13 @@ class TestLogin():
         result4 = self.orderdetails.get_order_number1()
         # 断言订单号是否正确
         assume(result2 in result4, "预期结果为：{1}，实际结果为：{0}".format(result2, result4))
-        '''
-        # 客服页面句柄定位不到暂时注释
-        # 校验联系客服跳转
+
+        # 订单详情-点击联系商家
+        # self.orderdetails.switch_window()
         text = self.orderdetails.click_contact_merchant()
         assume(text == "小九在线客服", "预期结果为：小九在线客服，实际结果为：{0}".format(text))
         self.detailsPage.close_and_switch_window()
-        '''
+
         # 关闭当前页面，返回到订单列表页
         self.detailsPage.close_and_switch_window()
         sleep(3)
@@ -136,22 +134,24 @@ class TestLogin():
         sleep(3)
         # 点击店铺名称，跳转到店铺首页校验
         result6 = self.myorder.click_store_name()
-        print(6)
         # 断言店铺名称是否正确
         assume(result6 == "湖北九州通", "预期结果为：湖北九州通，实际结果为：{0}".format(result6))
         # 关闭当前页面，返回到订单列表页
         self.detailsPage.close_and_switch_window()
         sleep(3)
-        '''
+
+        """
         # 跳转到客服页面获取不到句柄，切不到最新页面，暂时注释
-        # 点击店和我联系，跳转到客服首页
+        # 点击和我联系，跳转到客服首页
+        self.myorder.switch_window()
         result7 = self.myorder.click_relation_and_me(result2)
         # 断言客服名称是否正确
         assume(result7 == "小九在线客服", "预期结果为：小九在线客服，实际结果为：{0}".format(result7))
         # 关闭当前页面，返回到订单列表页
         self.detailsPage.close_and_switch_window()
         sleep(3)
-        '''
+        """
+
         # 取消订单校验
         self.myorder.cancellation_of_order(result2)
         sleep(5)

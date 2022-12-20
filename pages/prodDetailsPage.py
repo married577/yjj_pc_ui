@@ -30,12 +30,14 @@ class DetailsPage(BaseMenus):
         sleep(2)
         self.send_keys_loc(self.__search_text_loc, keywords)
         self.enter_key(self.__search_text_loc)
+        sleep(3)
+        self.switch_window()
         # self.click_loc(self.__search_button_loc)
         # 等待页面跳转到搜索结果页面
         # self.wait_title_change('商品搜索列表', timeout=30)
         # Log().info(u'跳转到商品搜索列表页面')
-        from pages.prodSearchResultPage import SearchResult
-        return SearchResult(self.driver)
+        # from pages.prodSearchResultPage import SearchResult
+        # return SearchResult(self.driver)
 
     # ===========================================商品面包屑操作=====================================================
      # 面包屑元素
@@ -74,7 +76,7 @@ class DetailsPage(BaseMenus):
     # 商品编码
     __prod_no_loc = ('xpath', "//div[@class='m_sec_bd']//dl/dt[contains(text(),'商品编码')]/following-sibling::dd")
     # 商品名称
-    __prod_name_loc = ('xpath', '//div[@class="gd-full_screen"]/div/div[2]/div[2]/h3/span[2]')
+    __prod_name_loc = ('xpath', '//span[contains(text(),"商品名称")]/following-sibling::*/div')
     # 商品价格 -- 采购价
     __prod_price_loc = ('xpath', '//span[contains(@class, "u_purc_price")]')
     # 参考零售价
@@ -102,6 +104,8 @@ class DetailsPage(BaseMenus):
 
     # 获取详情页prodname
     def get_prodname(self):
+        self.js_focus_element_loc(self.__prod_name_loc)
+        sleep(2)
         x = self.get_text_loc(self.__prod_name_loc)
         # 去掉获取商品名称的末尾的空格
         return x
@@ -235,7 +239,7 @@ class DetailsPage(BaseMenus):
         text = self.get_text_loc(self.__msg_loc)
         return text
 
-    __yjj_icon_loc = ('xpath', '//*[@id="__layout"]/div/div/div[2]/div/div/div[1]/div/img')
+    __yjj_icon_loc = ('xpath', '//div[@class="ph-logo"]/div[@class="ph-yjj_logo"]//img')
 
     # 药九九图标跳转
     def yjj_icon_skip(self):
@@ -342,7 +346,7 @@ class DetailsPage(BaseMenus):
     # 器械注册证
     __Instrument_registration_certificate_loc = ('xpath', "//*[text()='器械注册证']")
     # 药监局数据查询
-    __link_drug_data = ('xpath', '//*[@id="pane-0"]/div/div[2]/p/a')
+    __link_drug_data = ('xpath', '//a[contains(text(),"药监局数据查询")]')
 
     # 根据字段名称检查商品详情页面某元素是否存在
     def check_exist_in_detail_page(self, field_name):
