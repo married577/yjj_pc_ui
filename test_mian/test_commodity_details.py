@@ -217,7 +217,7 @@ class TestLogin():
         # 获取搜索页面，搜索结果商品名称
         result2 = self.searchpage.get_goods_name()
         # 关闭当前页面，切换到最后面一个窗口,回到商品详情页面
-        self.basepage.close_and_switch_window()
+        self.searchpage.back()
         assume(result1 in result2, "预期结果为：{0}，实际结果为：{1}".format(result1, result2))
 
     # 商品详情加购校验
@@ -238,5 +238,3 @@ class TestLogin():
         # 关闭当前页面，切换到最后面一个窗口,回到商品详情页面
         self.detailsPage.close_and_switch_window()
         sleep(2)
-
-

@@ -362,6 +362,7 @@ class MyCart(BaseMenus):
         __hint_remove_loc = ('xpath', '/html/body/div[@role="alert"]/p')
         # 滑动到元素位置
         self.js_focus_element_loc(__item_loc)
+        sleep(2)
         # 点击删除指定商品
         self.click_loc(__item_loc)
         sleep(2)

@@ -846,6 +846,7 @@ class MemberCenter(BaseMenus):
 
     # 会员中心-搜索页面搜索校验
     def member_center_search(self, prod_name):
+        self.js_focus_element_loc(self.__member_center_search)
         # 输入搜索关键字
         self.send_keys_loc(self.__member_center_search, text=prod_name)
         # 回车

@@ -151,7 +151,6 @@ class TestLogin():
         self.detailsPage.close_and_switch_window()
         sleep(3)
         """
-
         # 取消订单校验
         self.myorder.cancellation_of_order(result2)
         sleep(5)

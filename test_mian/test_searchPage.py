@@ -12,7 +12,7 @@ import pytest
 
 username = "武汉市新洲区好药师周铺大药房"
 password = "123456"
-search_keyword = "测试"
+search_keyword = "三棱"
 
 # 跑的时候第一个商品不要设置成营销活动
 

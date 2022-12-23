@@ -169,16 +169,19 @@ class HomePage(BaseMenus):
 
     # 顶部领劵中心跳转
     __right_coupon_center1 = ('xpath',
-                              '//span[contains(text(), "领券中心")]')
+                              '//span[contains(text(), "领劵中心")]')
     __right_coupon_center2 = ('xpath', '//div[@class="ph-custom_content"]/div')
 
     def right__coupon_center(self):
-        '''点击顶部领劵中心按钮'''
-        self.click_loc(self.__right_coupon_center1)
-        """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
-        self.switch_window()
-        text = self.get_text_loc(self.__right_coupon_center2)
-        return text
+        try:
+            '''点击顶部领劵中心按钮'''
+            self.click_loc(self.__right_coupon_center1)
+            """切换window，针对打开多个窗时,切换窗口，默认切换到最新的一个窗口"""
+            self.switch_window()
+            text = self.get_text_loc(self.__right_coupon_center2)
+            return text
+        except TimeoutException:
+            print("没有定位到领劵中心，可能是没有配置领劵中心按钮")
 
     # 右侧常购清单跳转
     __right_often_buy1 = ('xpath',

@@ -137,6 +137,7 @@ class TestLogin():
         # 获取购物车列表商品名称
         result2 = self.mycar.all_goods_names()
         assume(result1 in result2, "预期结果为：{0}，实际结果为：{1}".format(result1, result2))
+        sleep(3)
         # 删除购物车指定商品
         result3 = self.mycar.remove_item(prod_name=result1)
         assume(result3 == "操作成功", "预期结果为：操作成功，实际结果为：{0}".format(result3))
@@ -152,7 +153,7 @@ class TestLogin():
         sleep(3)
 
     sleep(1)
-
+    
     # 购物车点击添加关注以及在我的关注商品页面显示正确和我的关注页面取消校验
     def test_assign_goods_attention(self):
         # 进入第一个商品商品详情页
@@ -199,7 +200,7 @@ class TestLogin():
     # 购物车,商品数量输入框输入加购商品,以及跳转到结算页面流程校验
     def test_modification_amount(self):
         # 加购数量设置
-        __quantity = 5
+        __quantity = 100
         # 进入第一个商品商品详情页
         self.detailsPage.go_to_proddetail()
         # 获取商品名称

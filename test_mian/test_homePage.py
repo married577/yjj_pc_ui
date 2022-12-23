@@ -10,7 +10,7 @@ import pytest
 
 username = "武汉市新洲区好药师周铺大药房"
 password = "123456"
-search_keyword = "测试"
+search_keyword = "三棱"
 product_name = "自动化专用勿动1"
 
 

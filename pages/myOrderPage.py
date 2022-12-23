@@ -74,7 +74,7 @@ class MyOrder(BaseMenus):
 
     # 取消订单
     def cancellation_of_order(self, text):
-        __cancellation_button_loc = ('xpath', '//div[contains(text(),"%s")]/../../../div/div[2]/div[5]/div[2]' % text)
+        __cancellation_button_loc = ('xpath', '//div[contains(text(),"%s")]/../../..//div[contains(text(),"取消订单")]' % text)
         __select_reason_loc = ('xpath', '//*[@id="wrapper"]/div/div[1]/div')
         __confirm_button_loc = ('xpath', '//div[contains(text(),"%s")]/../../..//span[text()="确认取消"]' % text)
         # 点击取消按钮

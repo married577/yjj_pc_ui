@@ -20,7 +20,7 @@ password = "123456"
 search_keyword = "测试"
 # 支付商品编码
 product_code = "100118860"
-product_name = "自动化专用勿动1"
+product_name = "三棱"
 
 # 跑的时候第一个商品不要设置成营销活动
 
@@ -74,7 +74,7 @@ class TestLogin():
         assume(result == "领券中心", "预期结果为：领券中心，实际结果为：{0}".format(result))
         self.driver.back()
         sleep(2)
-    """
+    
     sleep(1)
 
     # 点击钱包充值校验
@@ -85,6 +85,7 @@ class TestLogin():
         sleep(2)
 
     sleep(1)
+    """
 
     # 点击查看明细校验
     def test_click_details_view(self):
@@ -310,6 +311,18 @@ class TestLogin():
 
     sleep(1)
 
+    # 会员中心-搜索校验
+    def test_member_center_search(self):
+        # 会员中心搜索
+        self.membercenter.member_center_search(prod_name=product_name)
+        self.searchpage.switch_window()
+        # 获取搜索页面搜索结果商品名称
+        result = self.searchpage.get_goods_name()
+        assume(product_name in result, "预期结果为：{1}，实际结果为：{0}".format(result, product_name))
+        # 返回到会员中心页面
+        self.searchpage.close_and_switch_window()
+        sleep(3)
+
     # 会员中心-切换企业校验
     def test_switch_to_enterprise(self):
         # 选择切换企业进行切换
@@ -326,7 +339,7 @@ class TestLogin():
         # 还原-切换到原来的企业
         sleep(3)
         self.membercenter.back_enterprise()
-        # 新企业首页-关闭引导和证照补全和过期
+        # 原企业首页-关闭引导和证照补全和过期
         self.home.home_page_guidance()
         self.home.home_expired_certificate()
         self.home.home_complete_the_certificate()
@@ -337,19 +350,3 @@ class TestLogin():
         # 会员中心如果有引导就操作引导
         self.membercenter.member_center_guidance()
         sleep(3)
-
-    sleep(1)
-
-    # 会员中心-搜索校验
-    def test_member_center_search(self):
-        # 会员中心搜索
-        self.membercenter.member_center_search(prod_name=product_name)
-        self.searchpage.switch_window()
-        # 获取搜索页面搜索结果商品名称
-        result = self.searchpage.get_goods_name()
-        assume(product_name in result, "预期结果为：{1}，实际结果为：{0}".format(result, product_name))
-        # 返回到会员中心页面
-        self.searchpage.close_and_switch_window()
-        sleep(3)
-
-    sleep(1)
