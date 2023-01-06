@@ -139,10 +139,11 @@ class TestLogin():
         sleep(2)
         # 获取我的关注列表页面，所有店铺名称
         result2 = self.membercenter.get_wdgz_storename()
+        result3 = ("".join(result2))
         if result1 == "湖北九州通":
             assume("九州通医药集团股份有限公司" in result2, "店铺名称为：{0}，关注列表的店铺名称为：{1}".format(result1, result2))
         else:
-            assume(result1 in result2, "店铺名称为：{0}，关注列表的店铺名称为：{1}".format(result1, result2))
+            assume(result1 in result3, "店铺名称为：{0}，关注列表的店铺名称为：{1}".format(result1, result3))
         # 关闭当前页面，切换到最后面一个窗口
         self.basepage.close_and_switch_window()
         sleep(2)
@@ -183,17 +184,17 @@ class TestLogin():
         # 点击店铺客服
         self.detailsPage.check_page_after_click_customer_servise()
         # 切换到最新窗口
-        self.basepage.switch_window()
+        # self.basepage.switch_window()
         sleep(3)
         # 客服页面获取校验文本
         result = self.detailsPage.get_service_page_text()
         # 关闭当前页面，切换到最后面一个窗口,回到商品详情页面
-        self.basepage.close_and_switch_window()
+        # self.basepage.close_and_switch_window()
         sleep(2)
         assume(result == "小九在线客服", "预期结果为：小九在线客服，实际结果为：{0}".format(result))
 
     sleep(1)
-
+    
     # 药九九图标跳转验证
     def test_yjj_icon_skip(self):
         # 点击药九九图标
@@ -235,6 +236,9 @@ class TestLogin():
         # 获取购物车列表商品名称
         result2 = self.mycar.all_goods_names()
         assume(result1 in result2, "预期结果为：{0}，实际结果为：{1}".format(result1, result2))
+        # 删除购物车商品
+        result3 = self.mycar.remove_item(prod_name=result1)
+        assume(result3 == "操作成功", "预期结果为：操作成功，实际结果为：{0}".format(result3))
         # 关闭当前页面，切换到最后面一个窗口,回到商品详情页面
         self.detailsPage.close_and_switch_window()
         sleep(2)

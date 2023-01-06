@@ -466,12 +466,21 @@ class DetailsPage(BaseMenus):
         sleep(2)
 
     __service_page_text_loc = ('xpath', '//div[@id="em-kefu-webim-chat"]//span[@class="em-widget-header-nickname"]')
+    __iframe_loc = ('xpath', '//*[@class="easemobim-chat-panel"]')
+    __iframe_close_loc = ('xpath', '//*[@title="关闭"]')
 
     # 客服页面校验文本获取
     def get_service_page_text(self):
+        # 切换iframe句柄
+        self.switch_frame(self.__iframe_loc)
         Log().info(u"店铺客服页面")
         # 获取校验文本
         text = self.get_text_loc(self.__service_page_text_loc)
+        sleep(2)
+        # 关闭客服框
+        self.click_loc(self.__iframe_close_loc)
+        # 跳出 iframe
+        self.back_to_default_window()
         return text
 
     # ================================================商品店铺操作================================================

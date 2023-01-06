@@ -358,7 +358,7 @@ class MyCart(BaseMenus):
     # 删除指定商品
     def remove_item(self, prod_name):
         __item_loc = ('xpath', '//*[text()="%s"]/../../..//*[text()="删除"]' % prod_name)
-        __confirm_remove_loc = ('xpath', '//*[@id="commodity-details"]/div[1]/div[2]/div[4]/div/div/div[3]/span/button[2]/span')
+        __confirm_remove_loc = ('xpath', '//*[@id="commodity-details"]/div[1]/div[1]/div[4]/div/div/div[3]/span/button[2]/span[contains(text(),"确 定")]')
         __hint_remove_loc = ('xpath', '/html/body/div[@role="alert"]/p')
         # 滑动到元素位置
         self.js_focus_element_loc(__item_loc)
@@ -367,7 +367,9 @@ class MyCart(BaseMenus):
         self.click_loc(__item_loc)
         sleep(2)
         # 点击确认删除
-        self.click_loc(__confirm_remove_loc)
+        # self.click_loc(__confirm_remove_loc)
+        element = self.find_element(__confirm_remove_loc)
+        self.driver.execute_script("arguments[0].click();", element)
         # 提取删除成功提示消息
         text = self.get_text_loc(__hint_remove_loc)
         return text
