@@ -97,9 +97,9 @@ class HomePage(BaseMenus):
     __message_center_data1 = ('xpath',
                               '//*[@id="__layout"]/div/div/div/div[2]/div/div/div[3]/div/div[1]/div/div[1]/span/span/div/div/span[1]')
     __message_center_data2 = (
-        'xpath', '//*[@id="__layout"]//div[@class="el-dialog__body"]//div[@class="ml-left"]/div/div')
+        'xpath', '//div[text()="消息中心"]')
     __message_center_data3 = (
-        'xpath', '//*[@id="__layout"]/div/div/div/div[2]/div/div/div[3]/div/div[1]/div/div[2]/div/div[1]/button')
+        'xpath', '/html/body/div[3]/div/div[1]/button')
 
     def message_center(self):
         '''点击消息中心'''
