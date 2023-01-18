@@ -137,7 +137,7 @@ class MyCart(BaseMenus):
     def check_all_prod(self):
         # 点击全选按钮，全部选中
         self.click_loc(self.__select_all)
-        sleep(4)
+        sleep(5)
         # 再次点击全选按钮，取消全部选中
         self.click_loc(self.__select_all)
         sleep(4)
@@ -279,9 +279,12 @@ class MyCart(BaseMenus):
     # 编辑商品数量
     def modify_prod_num(self, num, prod_no):
         __prod_quantity_loc = ('xpath', '//*[text()="%s"]/../../../div[3]/div/div[1]/div/div/div/input' % prod_no)
+        self.js_focus_element_loc(__prod_quantity_loc)
+        sleep(2)
         self.send_keys_loc(__prod_quantity_loc, num)
         __prod_unit_loc = ('xpath', '//*[text()="%s"]/../../../div[3]/div/div[3]' % prod_no)
-        self.click_loc(__prod_unit_loc)
+        # self.click_loc(__prod_unit_loc)
+        self.enter_key(__prod_quantity_loc)
         Log().info(u"编辑商品数量，输入： %s" % num)
 
     def modify_prod_num2(self, num, prod_no):

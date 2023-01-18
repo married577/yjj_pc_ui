@@ -555,7 +555,10 @@ class SearchResult(BaseMenus):
     def get_the_price(self):
         price1 = self.get_text_loc(self.__get_price_loc1)
         price2 = self.get_text_loc(self.__get_price_loc2)
-        return price1, price2
+        price3 = float(price1)
+        price4 = float(price2)
+
+        return price3, price4
 
     def price_rank(self, down, up):
         """

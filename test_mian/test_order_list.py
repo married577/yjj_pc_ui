@@ -71,16 +71,21 @@ class TestLogin():
         self.detailsPage.go_to_proddetail()
         # 获取商品名称
         result1 = self.detailsPage.get_prodname()
+        print(result1)
         # 点击加入购物车
         self.detailsPage.click_add_to_cart()
         # 跳转到购物车页面
         self.detailsPage.go_to_my_cart()
+        sleep(3)
         # 清空全选
         self.mycar.check_all_prod()
+        sleep(2)
         # 输入框输入购买数量
         self.mycar.modify_prod_num(num=__quantity, prod_no=result1)
+        sleep(3)
         # 选中指定的商品
         self.mycar.check_appoint_prod(prod_name=result1)
+        sleep(1)
         # 点击去结算
         self.mycar.submit_order_button()
         # 判断是否有包邮提醒
@@ -117,7 +122,7 @@ class TestLogin():
         # self.orderdetails.switch_window()
         text = self.orderdetails.click_contact_merchant()
         assume(text == "小九在线客服", "预期结果为：小九在线客服，实际结果为：{0}".format(text))
-        self.detailsPage.close_and_switch_window()
+        # self.detailsPage.close_and_switch_window()
 
         # 关闭当前页面，返回到订单列表页
         self.detailsPage.close_and_switch_window()

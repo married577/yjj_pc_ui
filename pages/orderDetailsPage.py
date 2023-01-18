@@ -154,12 +154,20 @@ class OrderDetails(Action):
 
     # 点击联系商家
     def click_contact_merchant(self):
+        __iframe_loc = ('xpath', '//*[@class="easemobim-chat-panel"]')
+        __iframe_close_loc = ('xpath', '//*[@title="关闭"]')
         self.js_focus_element_loc(self.__contact_merchant_loc)
         self.click_loc(self.__contact_merchant_loc)
         sleep(3)
-        self.switch_window()
+        # self.switch_window()
+        # 切换iframe句柄
+        self.switch_frame(__iframe_loc)
         sleep(3)
         text = self.get_text_loc(self.__service_name_loc)
+        # 关闭客服框
+        self.click_loc(__iframe_close_loc)
+        # 跳出 iframe
+        self.back_to_default_window()
         return text
 
     __buy_again_button_loc = ('xpath', '//div[contains(text(),"再次购买")]')
