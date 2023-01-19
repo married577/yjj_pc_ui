@@ -30,5 +30,5 @@ ONLINE_ISSUE_TEST_PATH = os.path.join(BASE_PATH, 'test', 'online_issues')
 # pytest.ini文件地址
 PYTEST_FILE_PATH = os.path.join(BASE_PATH, 'pytest.ini')
 # 报告的地址
-RESULT_PATH = os.path.join(BASE_PATH, 'tmp', 'result')
-REPORT_PATH = os.path.join(BASE_PATH, 'tmp', 'report', time.strftime('%Y%m%d%H%M%S'))
+RESULT_PATH = os.path.join(BASE_PATH, 'test_mian', 'report')
+REPORT_PATH = os.path.join(BASE_PATH, 'test_mian', 'report', time.strftime('%Y%m%d%H%M%S'))
