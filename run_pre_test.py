@@ -13,4 +13,4 @@ if __name__ == '__main__':
     IniUtil(PYTEST_FILE_PATH).update_value_of_opetion2('pytest', 'testpaths', 'test_mian')
     # 执行测试用例并生成报告
     pytest.main(['-q', '--alluredir={}'.format(RESULT_PATH), '--clean-alluredir'])
-    # subprocess.call("allure generate %s -c -o %s" % (RESULT_PATH,REPORT_PATH), shell=True)
+    # subprocess.call("allure generate %s -c -o %s" % (RESULT_PATH, REPORT_PATH), shell=True)
