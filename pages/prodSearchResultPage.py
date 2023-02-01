@@ -64,7 +64,9 @@ class SearchResult(BaseMenus):
 
     # 清除筛选
     def clear_search(self):
-        self.click_loc(self.__clear_search_loc)
+        element = self.find_element(self.__clear_search_loc)
+        self.driver.execute_script("arguments[0].click();", element)
+        # self.click_loc(self.__clear_search_loc)
         sleep(2)
 
     # 搜索框

@@ -362,22 +362,25 @@ class MemberCenter(BaseMenus):
 
     # 订单中心-点击退货/售后-召回商品列表搜索
     def recall_of_goods_list(self):
-        __recall_of_goods_loc = ('xpath', '//div[@class="top"]/span[4]')
-        __extract_prodname_loc = (
-            'xpath', '//div[@class="orderList"][1]/div[2]/div/div[1]/ul/li/div/div[1]/div[2]/div[1]')
-        __search_box_loc = ('xpath', '//div[@class="top"]/span[5]/div/input')
-        # 点击召回商品记录列表
-        self.click_loc(__recall_of_goods_loc)
-        sleep(2)
-        # 提取列表第一个商品名称
-        prod_name1 = self.get_text_loc(__extract_prodname_loc)
-        # 通过商品名称搜索
-        self.send_keys_loc(__search_box_loc, text=prod_name1)
-        self.enter_key(__search_box_loc)
-        sleep(3)
-        # 提取列表第一个商品名称
-        prod_name2 = self.get_text_loc(__extract_prodname_loc)
-        return prod_name1, prod_name2
+        try:
+            __recall_of_goods_loc = ('xpath', '//div[@class="top"]/span[4]')
+            __extract_prodname_loc = (
+                'xpath', '//div[@class="orderList"][1]/div[2]/div/div[1]/ul/li/div/div[1]/div[2]/div[1]')
+            __search_box_loc = ('xpath', '//div[@class="top"]/span[5]/div/input')
+            # 点击召回商品记录列表
+            self.click_loc(__recall_of_goods_loc)
+            sleep(2)
+            # 提取列表第一个商品名称
+            prod_name1 = self.get_text_loc(__extract_prodname_loc)
+            # 通过商品名称搜索
+            self.send_keys_loc(__search_box_loc, text=prod_name1)
+            self.enter_key(__search_box_loc)
+            sleep(3)
+            # 提取列表第一个商品名称
+            prod_name2 = self.get_text_loc(__extract_prodname_loc)
+            return prod_name1, prod_name2
+        except TimeoutException:
+            Log().info(u"查看列表是否有数据，没有数据请先添加数据")
 
     __discount_coupon = ('xpath', '//li[@class="second-li"]/span[text()="我的优惠券"]')
     __discount_coupon_text = ('xpath', '//div[@class="coupon-right-top-left"]')
@@ -534,24 +537,27 @@ class MemberCenter(BaseMenus):
 
     # 个人中心-支付查询页面-支付方式查询
     def pay_query_payment(self):
-        __pay_query_payment_loc = ('xpath', '//div[@class="query-cont"]/div[2]/div[1]/span/span/i')
-        __pay_query_payment_text_loc = ('xpath', '//tr[@class="el-table__row"][1]/td[5]/div')
-        __pay_query_payment_affirm = ('xpath', '//div[@class="query-cont"]/button')
-        # 提取列表第一个支付方式
-        text1 = self.get_text_loc(__pay_query_payment_text_loc)
-        __pay_query_payment_select_loc = ('xpath', '//div[@class="el-scrollbar"]/div[1]/ul/li/span[text()="{0}"]'.format(text1))
-        # 选择支付方式下拉框
-        self.click_loc(__pay_query_payment_loc)
-        sleep(2)
-        # 选择支付方式
-        self.click_loc(__pay_query_payment_select_loc)
-        sleep(2)
-        # 点击查询按钮
-        self.click_loc(__pay_query_payment_affirm)
-        sleep(3)
-        # 提取查询结果
-        text2 = self.get_text_loc(__pay_query_payment_text_loc)
-        return text1, text2
+        try:
+            __pay_query_payment_loc = ('xpath', '//div[@class="query-cont"]/div[2]/div[1]/span/span/i')
+            __pay_query_payment_text_loc = ('xpath', '//tr[@class="el-table__row"][1]/td[5]/div')
+            __pay_query_payment_affirm = ('xpath', '//div[@class="query-cont"]/button')
+            # 提取列表第一个支付方式
+            text1 = self.get_text_loc(__pay_query_payment_text_loc)
+            __pay_query_payment_select_loc = ('xpath', '//div[@class="el-scrollbar"]/div[1]/ul/li/span[text()="{0}"]'.format(text1))
+            # 选择支付方式下拉框
+            self.click_loc(__pay_query_payment_loc)
+            sleep(2)
+            # 选择支付方式
+            self.click_loc(__pay_query_payment_select_loc)
+            sleep(2)
+            # 点击查询按钮
+            self.click_loc(__pay_query_payment_affirm)
+            sleep(3)
+            # 提取查询结果
+            text2 = self.get_text_loc(__pay_query_payment_text_loc)
+            return text1, text2
+        except TimeoutException:
+            Log().info(u"查看列表是否有数据，没有数据请先添加数据")
 
     __my_wallet_loc = ('xpath', '//li[@class="second-li"]/span[text()="我的钱包"]')
     __my_wallet_text_loc = ('xpath', '//div[@class="count-title"]')

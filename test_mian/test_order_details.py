@@ -24,6 +24,7 @@ product_code = "100118860"
 # 跑的时候第一个商品不要设置成营销活动
 
 
+@pytest.mark.prod
 class TestLogin():
 
     @classmethod
@@ -86,6 +87,7 @@ class TestLogin():
         sleep(3)
         # 选择账期支付
         self.orderconfirmation.select_payment_days()
+        sleep(2)
         # 点击提交订单按钮
         self.orderconfirmation.click_submit_order()
         # 进入结算成功页面等待

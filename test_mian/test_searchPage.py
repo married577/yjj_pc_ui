@@ -58,6 +58,7 @@ class TestLogin():
         result2 = self.home.goods_category()
         assume(result1 == result2, "预期结果为：{1}，实际结果为：{0}".format(result1, result2))
         # 清除筛选项
+        sleep(2)
         self.searchpage.clear_search()
         # 清除筛选项校验
         element = '//div[@class="ss-breadcrumbs-selected"]/div/span[1]'

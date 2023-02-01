@@ -22,6 +22,7 @@ search_keyword = "测试"
 product_code = "100118860"
 
 
+@pytest.mark.prod
 class TestLogin():
 
     @classmethod

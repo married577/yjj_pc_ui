@@ -24,6 +24,7 @@ product_code = "100118860"
 # 跑的时候第一个商品不要设置成营销活动
 
 
+@pytest.mark.prod
 class TestLogin():
 
     @classmethod
