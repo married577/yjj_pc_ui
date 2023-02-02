@@ -151,8 +151,8 @@ class TestLogin():
         sleep(2)
         # 关闭当前页返回到商品搜索页面
         self.mycar.close_and_switch_window()
-        sleep(3)
 
+        sleep(3)
     sleep(1)
     
     # 购物车点击添加关注以及在我的关注商品页面显示正确和我的关注页面取消校验

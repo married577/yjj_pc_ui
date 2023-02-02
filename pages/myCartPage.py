@@ -367,7 +367,9 @@ class MyCart(BaseMenus):
         self.js_focus_element_loc(__item_loc)
         sleep(2)
         # 点击删除指定商品
-        self.click_loc(__item_loc)
+        # self.click_loc(__item_loc)
+        element = self.find_element(__item_loc)
+        self.driver.execute_script("arguments[0].click();", element)
         sleep(2)
         # 点击确认删除
         # self.click_loc(__confirm_remove_loc)
