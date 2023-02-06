@@ -11,10 +11,17 @@ from pages.myCartPage import MyCart
 from time import sleep
 from common.basePage import Action
 import pytest
+from common.fileReader import IniUtil
 
-username = "武汉市新洲区好药师周铺大药房"
-password = "123456"
-search_keyword = "测试"
+if IniUtil().get_value_of_option('test_env', 'env') == 'pre':
+    username = "武汉市新洲区好药师周铺大药房"
+    password = "123456"
+    search_keyword = "测试"
+
+if IniUtil().get_value_of_option('test_env', 'env') == 'prod':
+    username = "武汉市好药师周铺大药房有限公司"
+    password = "123456"
+    search_keyword = "测试"
 
 # 跑的时候第一个商品不要设置成营销活动
 
@@ -47,6 +54,7 @@ class TestLogin():
         self.home.home_page_guidance()
         # 首页证照过期
         self.home.home_expired_certificate()
+        sleep(3)
         result1 = self.home.get_top_username()  # 获取首页登录店铺名称
         assume(result1 == username, "预期结果为：{1}，实际结果为：{0}".format(result1, username))
         # 跳转到搜索页面

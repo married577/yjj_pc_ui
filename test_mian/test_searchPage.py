@@ -9,11 +9,17 @@ from pages.myCartPage import MyCart
 from time import sleep
 from common.basePage import Action
 import pytest
+from common.fileReader import IniUtil
 
-username = "武汉市新洲区好药师周铺大药房"
-password = "123456"
-search_keyword = "三棱"
+if IniUtil().get_value_of_option('test_env', 'env') == 'pre':
+    username = "武汉市新洲区好药师周铺大药房"
+    password = "123456"
+    search_keyword = "三棱"
 
+if IniUtil().get_value_of_option('test_env', 'env') == 'prod':
+    username = "武汉市好药师周铺大药房有限公司"
+    password = "123456"
+    search_keyword = "三棱"
 # 跑的时候第一个商品不要设置成营销活动
 
 
@@ -187,6 +193,9 @@ class TestLogin():
         # 获取购物车商品名称
         goods_name2 = self.mycar.all_goods_names()
         assume(goods_name1 in goods_name2, "预期结果为：{0}，实际结果为：{1}".format(goods_name1, goods_name2))
+        # 删除购物车商品
+        result3 = self.mycar.remove_item(prod_name=goods_name1)
+        assume(result3 == "操作成功", "预期结果为：操作成功，实际结果为：{0}".format(result3))
         # 返回到搜索页面
         self.mycar.close_and_switch_window()
         # 等待加载

@@ -7,11 +7,21 @@ from pages.homePage import HomePage
 from time import sleep
 from common.basePage import Action
 import pytest
+from common.fileReader import IniUtil
 
-username = "武汉市新洲区好药师周铺大药房"
-password = "123456"
-search_keyword = "三棱"
-product_name = "自动化专用勿动1"
+if IniUtil().get_value_of_option('test_env', 'env') == 'pre':
+    username = "武汉市新洲区好药师周铺大药房"
+    password = "123456"
+    search_keyword = "三棱"
+    product_name = "自动化专用勿动1"
+    compyname = "武汉市新洲区好药师周铺大药房"
+
+if IniUtil().get_value_of_option('test_env', 'env') == 'prod':
+    username = "武汉市新洲区好药师周铺大药房"
+    password = "123456"
+    search_keyword = "三棱"
+    product_name = "自动化专用勿动1"
+    compyname = "武汉市好药师周铺大药房有限公司"
 
 
 class TestLogin():
@@ -36,8 +46,10 @@ class TestLogin():
         self.loginpage.login_homepage_by_cookies()
         # 首页引导
         self.home.home_page_guidance()
+        # 关闭证照补全提示
+        self.home.home_complete_the_certificate()
         result1 = self.home.get_top_username()  # 获取首页登录店铺名称
-        assume(result1 == username, "预期结果为：{1}，实际结果为：{0}".format(result1, username))
+        assume(result1 == compyname, "预期结果为：{1}，实际结果为：{0}".format(result1, username))
 
     # 顶部消息中心跳转校验
     def test_message_center(self):
@@ -94,7 +106,9 @@ class TestLogin():
         assume(result8 == '小九在线客服', "预期结果为：小九在线客服，实际结果为：%s" % result8)
 
     """
+
     # 顶部领劵中心跳转校验
+    @pytest.mark.prod
     def test_right__coupon_center(self):
         result9 = self.home.right__coupon_center()
         assume(result9 == '领券中心', "预期结果为：领劵中心，实际结果为：%s" % result9)
@@ -104,6 +118,7 @@ class TestLogin():
     sleep(1)
 
     # 右侧常购清单跳转校验
+    @pytest.mark.prod
     def test_right__often_buy(self):
         result10 = self.home.right__often_buy()
         assume('常购清单' in result10, "预期结果为：常购清单，实际结果为：%s" % result10)
@@ -113,6 +128,7 @@ class TestLogin():
     sleep(1)
 
     # 右侧帮助中心跳转校验
+    @pytest.mark.prod
     def test_right__help_center(self):
         result11 = self.home.right__help_center()
         assume(result11 == '帮助中心', "预期结果为：帮助中心，实际结果为：%s" % result11)

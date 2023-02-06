@@ -4,10 +4,19 @@ from common.commonMethod import CommonMethod
 from common.AssertWithLog import assume
 from pages.homePage import HomePage
 import pytest
+from common.fileReader import IniUtil
 
-username = "武汉市新洲区好药师周铺大药房"
-password = "123456"
-errer_password = "654321"
+if IniUtil().get_value_of_option('test_env', 'env') == 'pre':
+    username = "武汉市新洲区好药师周铺大药房"
+    compyname = "武汉市新洲区好药师周铺大药房"
+    password = "123456"
+    errer_password = "654321"
+
+if IniUtil().get_value_of_option('test_env', 'env') == 'prod':
+    username = "武汉市新洲区好药师周铺大药房"
+    compyname = "武汉市好药师周铺大药房有限公司"
+    password = "123456"
+    errer_password = "654321"
 
 
 class TestLogin():
@@ -38,7 +47,7 @@ class TestLogin():
         # 关闭证照补全提示
         self.home.home_complete_the_certificate()
         result1 = self.home.get_top_username()  # 获取首页登录店铺名称
-        assume(result1 == username, "预期结果为：武汉市新洲区好药师周铺大药房，实际结果为：%s" % result1)
+        assume(result1 == compyname, "预期结果为：武汉市新洲区好药师周铺大药房，实际结果为：%s" % result1)
         # assert result == "武汉市新洲区好药师周铺大药房"
         self.home.log_out()  # 退出登录
 

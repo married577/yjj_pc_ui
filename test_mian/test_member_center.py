@@ -14,14 +14,23 @@ from pages.orderConfirmationPage import OrderConfirmation
 from time import sleep
 from common.basePage import Action
 import pytest
+from common.fileReader import IniUtil
 
-username = "武汉市新洲区好药师周铺大药房"
-password = "123456"
-search_keyword = "测试"
-# 支付商品编码
-product_code = "100118860"
-product_name = "三棱"
+if IniUtil().get_value_of_option('test_env', 'env') == 'pre':
+    username = "武汉市新洲区好药师周铺大药房"
+    password = "123456"
+    search_keyword = "测试"
+    # 支付商品编码
+    product_code = "100118860"
+    product_name = "三棱"
 
+if IniUtil().get_value_of_option('test_env', 'env') == 'prod':
+    username = "武汉市好药师周铺大药房有限公司"
+    password = "123456"
+    search_keyword = "测试"
+    # 支付商品编码
+    product_code = "100118860"
+    product_name = "三棱"
 # 跑的时候第一个商品不要设置成营销活动
 
 
@@ -324,6 +333,7 @@ class TestLogin():
         sleep(3)
 
     # 会员中心-切换企业校验
+    @pytest.mark.prod
     def test_switch_to_enterprise(self):
         # 选择切换企业进行切换
         result1 = self.membercenter.switch_to_enterprise()

@@ -4,11 +4,32 @@ from selenium import webdriver
 import time
 import requests
 import json
+from common.fileReader import IniUtil
+import urllib.parse
+
 
 # 登录url、账号、密码
+if IniUtil().get_value_of_option('test_env', 'env') == 'pre':
+    url = "https://web-api.pre.yyjzt.com/auth/api/app/login/password"
+    account = "武汉市新洲区好药师周铺大药房"
+    password = "e10adc3949ba59abbe56e057f20f883e"
+    rul1 = "https://web-api.pre.yyjzt.com/user/api/admin/userb2bcompanybind/companyList"
+    rul2 = "https://web-api.pre.yyjzt.com/auth/api/app/login/bindCompanyId"
+
+if IniUtil().get_value_of_option('test_env', 'env') == 'prod':
+    url = "https://web-api.yyjzt.com/auth/api/app/login/password"
+    account = "武汉市新洲区好药师周铺大药房"
+    password = "e10adc3949ba59abbe56e057f20f883e"
+    rul1 = "https://web-api.yyjzt.com/user/api/admin/userb2bcompanybind/companyList"
+    rul2 = "https://web-api.yyjzt.com/auth/api/app/login/bindCompanyId"
+
+'''
 url = "https://web-api.pre.yyjzt.com/auth/api/app/login/password"
 account = "武汉市新洲区好药师周铺大药房"
 password = "e10adc3949ba59abbe56e057f20f883e"
+rul1 = "https://web-api.pre.yyjzt.com/user/api/admin/userb2bcompanybind/companyList"
+rul2 = "https://web-api.pre.yyjzt.com/auth/api/app/login/bindCompanyId"
+'''
 
 
 # 获取登录token
@@ -21,52 +42,82 @@ def get_token():
 
     res = requests.post(url=url, data=json.dumps(data), headers=headers)
     token = res.json()['data']['zhcaiToken']  # json提取器获取token
-    userMobile = res.json()['data']['user']['userMobile']
+    usermobile = res.json()['data']['user']['userMobile']
+    username = res.json()['data']['user']['userName']
+    nickname = res.json()['data']['user']['nickName']
+    loginname = res.json()['data']['user']['loginName']
     # Test_demo.token = re.search('"token" : "(.*?)"', res)   正则表达式获取token
-    return token, userMobile
+    return token, usermobile, username, nickname, loginname
 
 
 # 获取公司ID
 def get_company_id():
     # 获取公司ID的url
-    __rul = "https://web-api.pre.yyjzt.com/user/api/admin/userb2bcompanybind/companyList"
-    token, userMobile = get_token()
-    data = {"phone": userMobile}
+    # rul1 = "https://web-api.pre.yyjzt.com/user/api/admin/userb2bcompanybind/companyList"
+    token, usermobile, username, nickname, loginname = get_token()
+    data = {"phone": usermobile}
     headers = {'token_platform_client_type': 'USER',
                'Content-Type': 'application/x-www-form-urlencoded',
                'Accept': 'application/json, text/plain, */*',
                'zhcaiToken': token}
 
-    res = requests.post(url=__rul, data=data, headers=headers)
+    res = requests.post(url=rul1, data=data, headers=headers)
     list = res.json()['data']['list']  # json提取器获取companyId
-    companyid = list[0]['companyId']
-    return companyid
+    count = len(list)
+    if count > 1:
+        for i in list:
+            if i['companyName'] == account:
+                companyid = i['companyId']
+                areacode = i['areaCode']
+                userid = i['userId']
+                userBasicid = i['userBasicId']
+                companyname = i['companyName']
+                return companyid, areacode, userid, userBasicid, companyname
+    else:
+        companyid = list[0]['companyId']
+        areacode = list[0]['areaCode']
+        userid = list[0]['userId']
+        userBasicid = list[0]['userBasicId']
+        companyname = list[0]['companyName']
+        return companyid, areacode, userid, userBasicid, companyname
+    # companyid = list[0]['companyId']
+    # areacode = list[0]['areaCode']
+    # return companyid, areacode
+
+
+# 用户信息中文url转码
+def url_transcoding():
+    token, usermobile, username, nickname, loginname = get_token()
+    companyid, areacode, userid, userBasicid, companyname = get_company_id()
+    companyname = urllib.parse.quote(companyname)  # 将汉字转换成url可识别的
+    usermobile = urllib.parse.quote(usermobile)
+    username = urllib.parse.quote(username)
+    nickname = urllib.parse.quote(nickname)
+    loginname = urllib.parse.quote(loginname)
+    return companyname, usermobile, username, nickname, loginname
 
 
 # 获取首页token
 def get_home_page_token():
     # 获取首页token的url
-    __url = "https://web-api.pre.yyjzt.com/auth/api/app/login/bindCompanyId"
+    # rul2 = "https://web-api.pre.yyjzt.com/auth/api/app/login/bindCompanyId"
     # 获取公司ID
-    companyid = get_company_id()
+    companyid, areacode, userid, userBasicid, companyname = get_company_id()
     # 获取登录的token
-    token, userMobile = get_token()
+    token, userMobile, username, nickname, loginname = get_token()
     data = {"companyId": companyid, "clientType": "PC"}
     headers = {'token_platform_client_type': 'USER',
                'Content-Type': 'application/json',
                'zhcaiToken': token,
                'Accept': 'application/json, text/plain, */*'}
 
-    res = requests.post(url=__url, data=json.dumps(data), headers=headers)
+    res = requests.post(url=rul2, data=json.dumps(data), headers=headers)
     # print(res.request.headers)
     token1 = res.json()['data']['zhcaiToken']  # json提取器获取token
     # Test_demo.token = re.search('"token" : "(.*?)"', res)   正则表达式获取token
     token2 = 'ssr_'
     token = token2 + token1
     return token
-
-    # 通过登录接口获取的token
-
 
 """
 def cookies_login():

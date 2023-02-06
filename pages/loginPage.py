@@ -7,7 +7,7 @@ from common.log import Log
 from common.fileReader import IniUtil
 from common.commonMethod import CommonMethod
 from time import sleep
-from common.get_login_token import get_home_page_token
+from common.get_login_token import get_home_page_token, get_company_id, url_transcoding
 
 
 class LoginPage(Action):
@@ -65,24 +65,26 @@ class LoginPage(Action):
         return HomePage(self.driver)
 
     def login_homepage_by_cookies(self):
+        companyid, areacode, userid, userBasicid, companyname = get_company_id()
+        companyname, usermobile, username, nickname, loginname = url_transcoding()
         token = get_home_page_token()
         self.open(self.__login_homepage_url)
         Log().info("打开登录首页: %s" % self.__login_homepage_url)
         sleep(1)
         # 给网页注入cookies
         cookies1 = {u'name': u'yjj-token', u'value': token}
-        cookies2 = {u'name': u'areaCode', u'value': u'42011100'}
-        cookies3 = {u'name': u'companyId', u'value': u'781020001'}
+        cookies2 = {u'name': u'areaCode', u'value': areacode}
+        cookies3 = {u'name': u'companyId', u'value': companyid}
         cookies4 = {u'name': u'companyName',
-                    u'value': u'%E6%AD%A6%E6%B1%89%E5%B8%82%E6%96%B0%E6%B4%B2%E5%8C%BA%E5%A5%BD%E8%8D%AF%E5%B8%88%E5%91%A8%E9%93%BA%E5%A4%A7%E8%8D%AF%E6%88%BF'}
+                    u'value': companyname}
         cookies5 = {u'name': u'existBindCustomer', u'value': u'1'}
         cookies6 = {u'name': u'loginName',
-                    u'value': u'%E6%AD%A6%E6%B1%89%E5%B8%82%E6%96%B0%E6%B4%B2%E5%8C%BA%E5%A5%BD%E8%8D%AF%E5%B8%88%E5%91%A8%E9%93%BA%E5%A4%A7%E8%8D%AF%E6%88%BF'}
-        cookies7 = {u'name': u'nickName', u'value': u'%E5%BE%AE%E4%BF%A1%E7%94%A8%E6%88%B7'}
-        cookies8 = {u'name': u'userId', u'value': u'4'}
-        cookies9 = {u'name': u'userMobile', u'value': u'17798242409'}
-        cookies10 = {u'name': u'userName', u'value': u'%E5%91%A8%E9%93%BA%E8%B4%9F%E8%B4%A3%E4%BA%BA'}
-        cookies11 = {u'name': u'userBasicId', u'value': u'3'}
+                    u'value': loginname}
+        cookies7 = {u'name': u'nickName', u'value': nickname}
+        cookies8 = {u'name': u'userId', u'value': userid}
+        cookies9 = {u'name': u'userMobile', u'value': usermobile}
+        cookies10 = {u'name': u'userName', u'value': username}
+        cookies11 = {u'name': u'userBasicId', u'value': userBasicid}
 
         self.driver.add_cookie(cookies1)  # 这里添加cookie，有时cookie可能会有多条，需要添加多次
         self.driver.add_cookie(cookies2)
