@@ -6,7 +6,7 @@ import subprocess
 from common.fileReader import IniUtil
 
 if __name__ == '__main__':
-    # 修改环境
+    # 修改环境,123
     file = IniUtil()
     file.update_value_of_opetion('test_env', 'env', 'pre')
     # # 修改执行路径
